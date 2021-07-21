@@ -1,9 +1,11 @@
 #include <core.h>
+#include <config.h>
 #include <client.h>
 #include <event.h>
 #include <log.h>
 #include <lang.h>
 LGroup *Base_Lang;
+CStore *Base_ConfigStore;
 
 static void onspawnfunc(void *param) {
   Client *client = (Client *)param;
@@ -12,13 +14,15 @@ static void onspawnfunc(void *param) {
   if(pd->firstSpawn) {
     cs_str name = Client_GetName(client);
     cs_str appname = Client_GetAppName(client);
-    Log_Info(Lang_Get(Base_Lang, 0), name, appname);
+    if(Config_GetBoolByKey(Base_ConfigStore, "connect-notifications"))
+      Log_Info(Lang_Get(Base_Lang, 0), name, appname);
     pd->firstSpawn = false;
   }
 }
 
 static void ondisconnectfunc(void *param) {
-  Log_Info(Lang_Get(Base_Lang, 1), Client_GetName((Client *)param));
+  if(Config_GetBoolByKey(Base_ConfigStore, "connect-notifications"))
+    Log_Info(Lang_Get(Base_Lang, 1), Client_GetName((Client *)param));
 }
 
 void Base_Chat(void) {

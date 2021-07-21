@@ -1,9 +1,13 @@
 #include <core.h>
 #include <lang.h>
+#include <config.h>
 
+void Base_Rcon(void);
 void Base_Chat(void);
+void Base_Config(void);
 void Base_Commands(void);
 LGroup *Base_Lang;
+CStore *Base_ConfigStore;
 cs_str Base_OSName;
 Plugin_SetVersion(1)
 
@@ -16,6 +20,7 @@ cs_bool Plugin_Load(void) {
   #endif
 
   Base_Lang = Lang_NewGroup(20);
+  // Notifications
   Lang_Set(Base_Lang, 0, "Player %s connected with %s.");
   Lang_Set(Base_Lang, 1, "Player %s disconnected.");
 
@@ -38,8 +43,9 @@ cs_bool Plugin_Load(void) {
   Lang_Set(Base_Lang, 13, "/kick <player> [reason]");
   Lang_Set(Base_Lang, 14, "Player %s kicked");
 
-
+  Base_Config();
   Base_Chat();
+  Base_Rcon();
   Base_Commands();
   return true;
 }
