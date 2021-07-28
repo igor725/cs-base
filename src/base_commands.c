@@ -234,9 +234,9 @@ COMMAND_FUNC(ChgWorld) {
 }
 
 COMMAND_FUNC(GenWorld) {
-	COMMAND_SETUSAGE("/genworld <name> <x> <y> <z>");
+	COMMAND_SETUSAGE("/genworld <name> <x> <y> <z> [generator]");
 
-	cs_char worldname[64], x[6], y[6], z[6];
+	cs_char worldname[64], genname[64], x[6], y[6], z[6];
 	if(COMMAND_GETARG(x, 6, 1) &&
 	COMMAND_GETARG(y, 6, 2) &&
 	COMMAND_GETARG(z, 6, 3)) {
@@ -251,13 +251,17 @@ COMMAND_FUNC(GenWorld) {
 			Vec_Set(vec, _x, _y, _z);
 			World_SetDimensions(tmp, &vec);
 			World_AllocBlockArray(tmp);
-			Generator_Flat(tmp);
+			cs_bool success;
+			if(COMMAND_GETARG(genname, 64, 4))
+				success = Generators_Use(tmp, genname, NULL);
+			else
+				success = Generators_Use(tmp, "flat", NULL);
 
-			if(World_Add(tmp)) {
+			if(success && World_Add(tmp)) {
 				COMMAND_PRINTF("World \"%s\" created.", worldname);
 			} else {
 				World_Free(tmp);
-				COMMAND_PRINT("Worlds limit exceed.");
+				COMMAND_PRINT("Worlds creation error.");
 			}
 		}
 	}
