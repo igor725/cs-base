@@ -15,7 +15,7 @@ cs_bool Plugin_Load(void) {
   Base_OSName = // Todo use uname and wmic
   #if defined(WINDOWS)
   "Windows";
-  #elif defined(POSIX)
+  #elif defined(UNIX)
   "Unix-like";
   #endif
 
