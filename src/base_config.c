@@ -8,7 +8,7 @@ void Base_Config(void) {
   CEntry *ent;
 
   ent = Config_NewEntry(Base_ConfigStore, "rcon-enabled", CFG_TBOOL);
-  Config_SetComment(ent, "Enable or disable rcon protocol. (WIP)");
+  Config_SetComment(ent, "Enable or disable rcon protocol.");
   Config_SetDefaultBool(ent, false);
 
   ent = Config_NewEntry(Base_ConfigStore, "rcon-port", CFG_TINT16);
