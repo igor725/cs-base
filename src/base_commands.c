@@ -6,7 +6,7 @@
 #include <generators.h>
 
 LGroup *Base_Lang;
-cs_str *Base_OSName;
+cs_char Base_OSName[64];
 cs_bool Base_AddOP(cs_str name);
 cs_bool Base_RemoveOP(cs_str name);
 

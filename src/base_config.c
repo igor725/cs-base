@@ -5,6 +5,7 @@
 #include <config.h>
 #include <client.h>
 #include <platform.h>
+
 CStore *Base_ConfigStore;
 AListField *Base_OPsList;
 cs_bool Base_OPsListAlerted = false;
@@ -104,7 +105,6 @@ void Base_OnSpawn(Client *cl) {
 }
 
 void Base_OnStop(void) {
-  if(Base_OPsListAlerted)
-    if(!SaveOPsList("ops.txt"))
-      Log_Error("Failed to save ops.txt.");
+  if(Base_OPsListAlerted && !SaveOPsList("ops.txt"))
+    Log_Error("Failed to save ops.txt.");
 }

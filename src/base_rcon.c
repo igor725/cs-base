@@ -14,16 +14,14 @@ cs_str Rcon_Password, Rcon_IP;
 cs_uint16 Rcon_Port;
 
 typedef struct {
-  cs_int32 size;
-  cs_int32 id;
-  cs_int32 cmd;
+  cs_int32 size, id, cmd;
   char payload[MAX_CMD_OUT];
 } RPacket;
 
 typedef struct {
   Socket fd;
-  struct sockaddr_in addr;
   cs_bool authed, error;
+  struct sockaddr_in addr;
   RPacket packet;
 } RClient;
 
@@ -116,7 +114,6 @@ static cs_bool handlerconclient(RClient *client) {
     if(Socket_Receive(client->fd, (cs_char *)&client->packet + 4, client->packet.size, 0) == client->packet.size)
       return handlerconpacket(client);
   }
-
   return false;
 }
 
@@ -153,10 +150,7 @@ void Base_Rcon(void) {
     }
     Rcon_IP = Config_GetStrByKey(Server_Config, "server-ip");
     Rcon_Port = Config_GetInt16ByKey(Base_ConfigStore, "rcon-port");
-    Rcon_Socket = Socket_New();
-    if(!Rcon_Socket) {
-      Error_PrintSys(false);
-    }
+    if((Rcon_Socket = Socket_New()) == INVALID_SOCKET) {Error_PrintSys(false);}
     struct sockaddr_in ssa;
     switch (Socket_SetAddr(&ssa, Rcon_IP, Rcon_Port)) {
       case 0:
@@ -167,6 +161,7 @@ void Base_Rcon(void) {
         break;
     }
     if(!Socket_Bind(Rcon_Socket, &ssa)) {
+      Socket_Close(Rcon_Socket);
       Error_PrintSys(false);
     } else {
       Log_Info("RCON server started on %s:%d", Rcon_IP, Rcon_Port);

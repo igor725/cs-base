@@ -2,6 +2,7 @@
 #include <lang.h>
 #include <config.h>
 #include <event.h>
+#include <str.h>
 
 void Base_Rcon(void);
 void Base_Chat(void);
@@ -11,16 +12,20 @@ void Base_OnSpawn(void *);
 void Base_Commands(void);
 LGroup *Base_Lang;
 CStore *Base_ConfigStore;
-cs_str Base_OSName;
+cs_char Base_OSName[64];
 Plugin_SetVersion(1)
 
 cs_bool Plugin_Load(void) {
-  Base_OSName = // Todo use uname and wmic
-  #if defined(WINDOWS)
-  "Windows";
-  #elif defined(UNIX)
-  "Unix-like";
-  #endif
+#if defined(WINDOWS)
+  String_Copy(Base_OSName, 64, "Windows");
+#elif defined(UNIX)
+  cs_file uname = File_ProcOpen("uname -osm", "r");
+  if(uname) {
+    File_ReadLine(uname, Base_OSName, 64);
+    File_ProcClose(uname);
+  } else
+    String_Copy(Base_OSName, 64, "Unix-like");
+#endif
 
   Base_Lang = Lang_NewGroup(20);
   // Notifications
