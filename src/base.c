@@ -1,10 +1,13 @@
 #include <core.h>
 #include <lang.h>
 #include <config.h>
+#include <event.h>
 
 void Base_Rcon(void);
 void Base_Chat(void);
 void Base_Config(void);
+void Base_OnStop(void *);
+void Base_OnSpawn(void *);
 void Base_Commands(void);
 LGroup *Base_Lang;
 CStore *Base_ConfigStore;
@@ -47,9 +50,9 @@ cs_bool Plugin_Load(void) {
   Base_Chat();
   Base_Rcon();
   Base_Commands();
+  Event_RegisterVoid(EVT_ONSPAWN, Base_OnSpawn);
+  Event_RegisterVoid(EVT_ONSTOP, Base_OnStop);
   return true;
 }
 
-cs_bool Plugin_Unload(void) {
-  return false;
-}
+cs_bool Plugin_Unload(void) {return false;}

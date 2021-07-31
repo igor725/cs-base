@@ -16,7 +16,6 @@ static void onspawnfunc(void *param) {
     cs_str appname = Client_GetAppName(client);
     if(Config_GetBoolByKey(Base_ConfigStore, "connect-notifications"))
       Log_Info(Lang_Get(Base_Lang, 0), name, appname);
-    pd->firstSpawn = false;
   }
 }
 

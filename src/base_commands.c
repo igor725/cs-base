@@ -4,8 +4,11 @@
 #include <plugin.h>
 #include <lang.h>
 #include <generators.h>
+
 LGroup *Base_Lang;
 cs_str *Base_OSName;
+cs_bool Base_AddOP(cs_str name);
+cs_bool Base_RemoveOP(cs_str name);
 
 COMMAND_FUNC(Info) {
 	COMMAND_PRINTF(
@@ -21,14 +24,26 @@ COMMAND_FUNC(MakeOp) {
 
 	cs_char clientname[64];
 	if(COMMAND_GETARG(clientname, 64, 0)) {
-		Client *tg = Client_GetByName(clientname);
-		if(tg) {
-			PlayerData *pd = tg->playerData;
-			cs_str name = pd->name;
-			pd->isOP ^= 1;
-			COMMAND_PRINTF("Player %s %s", name, pd->isOP ? "opped" : "deopped");
+		if(Base_AddOP(clientname)) {
+			Client *client = Client_GetByName(clientname);
+			if(client) client->playerData->isOP = true;
+			COMMAND_PRINTF("Player %s added to the OPs list.", clientname);
 		} else {
-			COMMAND_PRINT(Lang_Get(Lang_CmdGrp, 2));
+			COMMAND_PRINT("Failed to add player to OPs list.");
+		}
+	}
+	COMMAND_PRINTUSAGE;
+}
+
+COMMAND_FUNC(DeOp) {
+	COMMAND_SETUSAGE("/deop <playername>");
+
+	cs_char clientname[64];
+	if(COMMAND_GETARG(clientname, 64, 0)) {
+		if(Base_RemoveOP(clientname)) {
+			COMMAND_PRINTF("Player %s removed from the OPs list.", clientname);
+		} else {
+			COMMAND_PRINT("Failed to remove player from OPs list.");
 		}
 	}
 	COMMAND_PRINTUSAGE;
@@ -311,6 +326,7 @@ COMMAND_FUNC(SavWorld) {
 void Base_Commands(void) {
   COMMAND_ADD(Info, CMDF_OP);
   COMMAND_ADD(MakeOp, CMDF_OP);
+	COMMAND_ADD(DeOp, CMDF_OP);
   COMMAND_ADD(Uptime, CMDF_NONE);
   COMMAND_ADD(CFG, CMDF_OP);
   COMMAND_ADD(Plugins, CMDF_OP);
