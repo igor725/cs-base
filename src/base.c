@@ -9,7 +9,9 @@ void Base_Chat(void);
 void Base_Config(void);
 void Base_OnStop(void *);
 void Base_OnSpawn(void *);
+void Base_OnHandshake(Client *cl);
 void Base_Commands(void);
+
 LGroup *Base_Lang;
 CStore *Base_ConfigStore;
 cs_char Base_OSName[64];
@@ -28,6 +30,7 @@ cs_bool Plugin_Load(void) {
 #endif
 
   Base_Lang = Lang_NewGroup(20);
+
   // Notifications
   Lang_Set(Base_Lang, 0, "Player %s connected with %s.");
   Lang_Set(Base_Lang, 1, "Player %s disconnected.");
@@ -48,13 +51,21 @@ cs_bool Plugin_Load(void) {
   Lang_Set(Base_Lang, 12, "\r\n(Can't show full plugins list)");
 
   // "Kick" command
-  Lang_Set(Base_Lang, 13, "/kick <player> [reason]");
-  Lang_Set(Base_Lang, 14, "Player %s kicked");
+  Lang_Set(Base_Lang, 13, "Player %s kicked");
+
+  // "Ban" command
+  Lang_Set(Base_Lang, 14, "/kick <player> [reason]");
+  Lang_Set(Base_Lang, 15, "Player %s banned.");
+  Lang_Set(Base_Lang, 16, "Player %s unbanned.");
+  Lang_Set(Base_Lang, 17, "You are banned!");
+  Lang_Set(Base_Lang, 18, "Failed to add player to banlist.");
+  Lang_Set(Base_Lang, 19, "Failed to remove player from banlist.");
 
   Base_Config();
   Base_Chat();
   Base_Rcon();
   Base_Commands();
+  Event_RegisterVoid(EVT_ONHANDSHAKEDONE, Base_OnHandshake);
   Event_RegisterVoid(EVT_ONSPAWN, Base_OnSpawn);
   Event_RegisterVoid(EVT_ONSTOP, Base_OnStop);
   return true;

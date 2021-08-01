@@ -9,6 +9,8 @@ LGroup *Base_Lang;
 cs_char Base_OSName[64];
 cs_bool Base_AddOP(cs_str name);
 cs_bool Base_RemoveOP(cs_str name);
+cs_bool Base_AddBan(cs_str name);
+cs_bool Base_RemoveBan(cs_str name);
 
 COMMAND_FUNC(Info) {
 	COMMAND_PRINTF(
@@ -21,7 +23,6 @@ COMMAND_FUNC(Info) {
 
 COMMAND_FUNC(MakeOp) {
 	COMMAND_SETUSAGE("/makeop <playername>");
-
 	cs_char clientname[64];
 	if(COMMAND_GETARG(clientname, 64, 0)) {
 		if(Base_AddOP(clientname)) {
@@ -37,13 +38,42 @@ COMMAND_FUNC(MakeOp) {
 
 COMMAND_FUNC(DeOp) {
 	COMMAND_SETUSAGE("/deop <playername>");
-
 	cs_char clientname[64];
 	if(COMMAND_GETARG(clientname, 64, 0)) {
 		if(Base_RemoveOP(clientname)) {
+			Client *client = Client_GetByName(clientname);
+			if(client) client->playerData->isOP = false;
 			COMMAND_PRINTF("Player %s removed from the OPs list.", clientname);
 		} else {
 			COMMAND_PRINT("Failed to remove player from OPs list.");
+		}
+	}
+	COMMAND_PRINTUSAGE;
+}
+
+COMMAND_FUNC(Ban) {
+	COMMAND_SETUSAGE("/ban <playername>");
+	cs_char clientname[64];
+	if(COMMAND_GETARG(clientname, 64, 0)) {
+		if(Base_AddBan(clientname)) {
+			Client *client = Client_GetByName(clientname);
+			if(client) Client_Kick(client, Lang_Get(Base_Lang, 17));
+			COMMAND_PRINTF(Lang_Get(Base_Lang, 15), clientname);
+		} else {
+			COMMAND_PRINT(Lang_Get(Base_Lang, 18));
+		}
+	}
+	COMMAND_PRINTUSAGE;
+}
+
+COMMAND_FUNC(UnBan) {
+	COMMAND_SETUSAGE("/unban <playername>");
+	cs_char clientname[64];
+	if(COMMAND_GETARG(clientname, 64, 0)) {
+		if(Base_RemoveBan(clientname)) {
+			COMMAND_PRINTF(Lang_Get(Base_Lang, 16), clientname);
+		} else {
+			COMMAND_PRINT(Lang_Get(Base_Lang, 19));
 		}
 	}
 	COMMAND_PRINTUSAGE;
@@ -202,7 +232,7 @@ COMMAND_FUNC(Stop) {
 }
 
 COMMAND_FUNC(Kick) {
-	COMMAND_SETUSAGE(Lang_Get(Base_Lang, 13));
+	COMMAND_SETUSAGE("/kick <player> [reason]");
 
 	cs_char playername[64];
 	if(COMMAND_GETARG(playername, 64, 0)) {
@@ -210,7 +240,7 @@ COMMAND_FUNC(Kick) {
 		if(tg) {
 			cs_str reason = String_FromArgument(ccdata->args, 1);
 			Client_Kick(tg, reason);
-			COMMAND_PRINTF(Lang_Get(Base_Lang, 14), playername);
+			COMMAND_PRINTF(Lang_Get(Base_Lang, 13), playername);
 		} else {
 			COMMAND_PRINTF(Lang_Get(Lang_CmdGrp, 2));
 		}
@@ -327,6 +357,8 @@ void Base_Commands(void) {
   COMMAND_ADD(Info, CMDF_OP);
   COMMAND_ADD(MakeOp, CMDF_OP);
 	COMMAND_ADD(DeOp, CMDF_OP);
+	COMMAND_ADD(Ban, CMDF_OP);
+	COMMAND_ADD(UnBan, CMDF_OP);
   COMMAND_ADD(Uptime, CMDF_NONE);
   COMMAND_ADD(CFG, CMDF_OP);
   COMMAND_ADD(Plugins, CMDF_OP);
