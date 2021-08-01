@@ -9,7 +9,7 @@ void Base_Chat(void);
 void Base_Config(void);
 void Base_OnStop(void *);
 void Base_OnSpawn(void *);
-void Base_OnHandshake(Client *cl);
+void Base_OnHandshake(void *);
 void Base_Commands(void);
 
 LGroup *Base_Lang;

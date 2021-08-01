@@ -8,7 +8,7 @@
 #include <command.h>
 #include <lang.h>
 
-CStore *Base_ConfigStore;
+extern CStore *Base_ConfigStore;
 Socket Rcon_Socket;
 cs_str Rcon_Password, Rcon_IP;
 cs_uint16 Rcon_Port;

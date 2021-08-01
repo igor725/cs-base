@@ -5,8 +5,8 @@
 #include <lang.h>
 #include <generators.h>
 
-LGroup *Base_Lang;
-cs_char Base_OSName[64];
+extern LGroup *Base_Lang;
+extern cs_char Base_OSName[64];
 cs_bool Base_AddOP(cs_str name);
 cs_bool Base_RemoveOP(cs_str name);
 cs_bool Base_AddBan(cs_str name);

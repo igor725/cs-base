@@ -8,8 +8,8 @@
 #include <platform.h>
 #include "base_lists.h"
 
-LGroup *Base_Lang;
-CStore *Base_ConfigStore;
+extern LGroup *Base_Lang;
+extern CStore *Base_ConfigStore;
 BList operators = {
   .alerted = false,
   .filename = "ops.txt",

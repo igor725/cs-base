@@ -4,8 +4,9 @@
 #include <event.h>
 #include <log.h>
 #include <lang.h>
-LGroup *Base_Lang;
-CStore *Base_ConfigStore;
+
+extern LGroup *Base_Lang;
+extern CStore *Base_ConfigStore;
 
 static void onspawnfunc(void *param) {
   Client *client = (Client *)param;
