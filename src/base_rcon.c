@@ -128,9 +128,13 @@ THREAD_FUNC(Rcon_Client) {
 THREAD_FUNC(Rcon_Accept) {
   (void)param;
   while(true) {
-    RClient *rclient = (RClient *)Memory_Alloc(1, sizeof(RClient));
-    rclient->error = false;
-    rclient->authed = false;
+    RClient *rclient = (RClient *)Memory_TryAlloc(1, sizeof(RClient));
+    if(!rclient) {
+      Log_Error("Can't allocate memory for RClient structure.");
+      Socket_Close(Rcon_Socket);
+      Thread_Sleep(500);
+      continue;
+    }
     rclient->fd = Socket_Accept(Rcon_Socket, &rclient->addr);
     if(rclient->fd != INVALID_SOCKET)
       Thread_Create(Rcon_Client, (void *)rclient, true);
