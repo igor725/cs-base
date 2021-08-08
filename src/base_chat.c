@@ -2,6 +2,7 @@
 #include <config.h>
 #include <client.h>
 #include <event.h>
+#include <server.h>
 #include <log.h>
 #include <lang.h>
 
@@ -21,6 +22,7 @@ static void onspawnfunc(void *param) {
 }
 
 static void ondisconnectfunc(void *param) {
+  if(!Server_Active) return;
   if(Config_GetBoolByKey(Base_ConfigStore, "connect-notifications"))
     Log_Info(Lang_Get(Base_Lang, 1), Client_GetName((Client *)param));
 }

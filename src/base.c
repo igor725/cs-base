@@ -36,7 +36,7 @@ cs_bool Plugin_Load(void) {
   Lang_Set(Base_Lang, 1, "Player %s disconnected.");
 
   // "Info" command
-	Lang_Set(Base_Lang, 2, "CServer-%s with PluginAPI v%d runned on %s");
+	Lang_Set(Base_Lang, 2, "CServer/%s with PluginAPI v%03d runned on %s");
 
   // "Plugin" command
   Lang_Set(Base_Lang, 3, "/plugins <load/unload/print> [pluginName]");
