@@ -74,7 +74,7 @@ cs_bool Base_RemoveBan(cs_str name) {
 
 
 void Base_OnSpawn(Client *cl) {
-  if(cl->playerData->firstSpawn)
+  if(cl->playerData->firstSpawn && !cl->playerData->isOP)
     cl->playerData->isOP = Base_CheckList(&operators, Client_GetName(cl));
 }
 
