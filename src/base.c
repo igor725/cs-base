@@ -47,8 +47,7 @@ cs_bool Plugin_Load(void) {
   Lang_Set(Base_Lang, 8, "Plugin \"%s\" cannot be unloaded.");
   Lang_Set(Base_Lang, 9, "Plugin_Init() == false, something went wrong.");
   Lang_Set(Base_Lang, 10, "Loaded plugins list:");
-  Lang_Set(Base_Lang, 11, "\r\n%d.%s v%d");
-  Lang_Set(Base_Lang, 12, "\r\n(Can't show full plugins list)");
+  Lang_Set(Base_Lang, 11, "\r\n  %d.%s v%d");
 
   // "Kick" command
   Lang_Set(Base_Lang, 13, "Player %s kicked");

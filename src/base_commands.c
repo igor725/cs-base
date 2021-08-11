@@ -172,7 +172,7 @@ if(!lc || !String_CaselessCompare(lc, "." DLIB_EXT)) { \
 }
 
 COMMAND_FUNC(Plugins) {
-	COMMAND_SETUSAGE("/plugins <load/unload/print> [pluginName]");
+	COMMAND_SETUSAGE("/plugins <load/unload/list> [pluginName]");
 	cs_char subcommand[8], name[64];
 	Plugin *plugin;
 
@@ -206,10 +206,6 @@ COMMAND_FUNC(Plugins) {
 			for(cs_int32 i = 0; i < MAX_PLUGINS; i++) {
 				plugin = Plugins_List[i];
 				if(plugin) {
-					if(idx > 10) {
-						COMMAND_APPEND(Lang_Get(Base_Lang, 12));
-						break;
-					}
 					COMMAND_APPENDF(
 						pluginfo, 64,
 						Lang_Get(Base_Lang, 11), idx++,
