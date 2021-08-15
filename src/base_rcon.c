@@ -117,7 +117,7 @@ static cs_bool handlerconclient(RClient *client) {
   return false;
 }
 
-THREAD_FUNC(Rcon_Client) {
+THREAD_FUNC(RconClient) {
   RClient *rclient = (RClient *)param;
   while(!rclient->error && handlerconclient(rclient));
   Socket_Shutdown(rclient->fd, SD_SEND);
@@ -125,7 +125,7 @@ THREAD_FUNC(Rcon_Client) {
   return 0;
 }
 
-THREAD_FUNC(Rcon_Accept) {
+THREAD_FUNC(RconAccept) {
   (void)param;
   while(true) {
     RClient *rclient = (RClient *)Memory_TryAlloc(1, sizeof(RClient));
@@ -137,7 +137,7 @@ THREAD_FUNC(Rcon_Accept) {
     }
     rclient->fd = Socket_Accept(Rcon_Socket, &rclient->addr);
     if(rclient->fd != INVALID_SOCKET)
-      Thread_Create(Rcon_Client, (void *)rclient, true);
+      Thread_Create(RconClient, (void *)rclient, true);
     else {
       Memory_Free((void *)rclient);
       break;
@@ -154,22 +154,25 @@ void Base_Rcon(void) {
     }
     Rcon_IP = Config_GetStrByKey(Server_Config, "server-ip");
     Rcon_Port = Config_GetInt16ByKey(Base_ConfigStore, "rcon-port");
-    if((Rcon_Socket = Socket_New()) == INVALID_SOCKET) {Error_PrintSys(false);}
+    if((Rcon_Socket = Socket_New()) == INVALID_SOCKET) {
+      Error_PrintSys(false);
+      return;
+    }
     struct sockaddr_in ssa;
     switch (Socket_SetAddr(&ssa, Rcon_IP, Rcon_Port)) {
       case 0:
         ERROR_PRINT(ET_SERVER, EC_INVALIDIP, false);
-        break;
+        return;
       case -1:
         Error_PrintSys(false);
-        break;
+        return;
     }
     if(!Socket_Bind(Rcon_Socket, &ssa)) {
       Socket_Close(Rcon_Socket);
       Error_PrintSys(false);
     } else {
       Log_Info("RCON server started on %s:%d", Rcon_IP, Rcon_Port);
-      Thread_Create(Rcon_Accept, NULL, true);
+      Thread_Create(RconAccept, NULL, true);
     }
   }
 }
