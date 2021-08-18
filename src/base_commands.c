@@ -1,4 +1,5 @@
 #include <core.h>
+#include <config.h>
 #include <command.h>
 #include <server.h>
 #include <plugin.h>
@@ -95,18 +96,18 @@ COMMAND_FUNC(Uptime) {
 
 COMMAND_FUNC(CFG) {
 	COMMAND_SETUSAGE("/cfg <set/get/print> [key] [value]");
-	cs_char subcommand[8], key[MAX_CFG_LEN], value[MAX_CFG_LEN];
+	cs_char subcommand[8], key[CFG_MAX_LEN], value[CFG_MAX_LEN];
 
 	if(COMMAND_GETARG(subcommand, 8, 0)) {
 		if(String_CaselessCompare(subcommand, "set")) {
-			if(!COMMAND_GETARG(key, MAX_CFG_LEN, 1)) {
+			if(!COMMAND_GETARG(key, CFG_MAX_LEN, 1)) {
 				COMMAND_PRINTUSAGE;
 			}
 			CEntry *ent = Config_GetEntry(Server_Config, key);
 			if(!ent) {
 				COMMAND_PRINT("This entry not found in \"server.cfg\" store.");
 			}
-			if(!COMMAND_GETARG(value, MAX_CFG_LEN, 2)) {
+			if(!COMMAND_GETARG(value, CFG_MAX_LEN, 2)) {
 				COMMAND_PRINTUSAGE;
 			}
 
@@ -131,13 +132,13 @@ COMMAND_FUNC(CFG) {
 			}
 			COMMAND_PRINT("Entry value changed successfully.");
 		} else if(String_CaselessCompare(subcommand, "get")) {
-			if(!COMMAND_GETARG(key, MAX_CFG_LEN, 1)) {
+			if(!COMMAND_GETARG(key, CFG_MAX_LEN, 1)) {
 				COMMAND_PRINTUSAGE;
 			}
 
 			CEntry *ent = Config_GetEntry(Server_Config, key);
 			if(ent) {
-				if(!Config_ToStr(ent, value, MAX_CFG_LEN)) {
+				if(!Config_ToStr(ent, value, CFG_MAX_LEN)) {
 					COMMAND_PRINT("Can't detect entry type.");
 				}
 				COMMAND_PRINTF("%s = %s (%s)", key, value, Config_TypeName(ent->type));
@@ -148,9 +149,9 @@ COMMAND_FUNC(CFG) {
 			COMMAND_APPEND("Server config entries:")
 
 			while(ent) {
-				if(Config_ToStr(ent, value, MAX_CFG_LEN)) {
+				if(Config_ToStr(ent, value, CFG_MAX_LEN)) {
 					cs_str type = Config_TypeName(ent->type);
-					COMMAND_APPENDF(key, MAX_CFG_LEN, "\r\n%s = %s (%s)", ent->key, value, type)
+					COMMAND_APPENDF(key, CFG_MAX_LEN, "\r\n%s = %s (%s)", ent->key, value, type)
 				}
 				ent = ent->next;
 			}
