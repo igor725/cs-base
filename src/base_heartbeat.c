@@ -15,6 +15,7 @@ void Base_Heartbeat(void) {
 		Base_HeartbeatStruct->domain = "classicube.net";
 		Base_HeartbeatStruct->secretfile = "secret.txt";
 		Base_HeartbeatStruct->isSecure = true;
+		Base_HeartbeatStruct->freeAtEnd = true;
 
 		Base_HeartbeatStruct->delay = Config_GetInt8ByKey(Base_ConfigStore, "heartbeat-delay") * 1000;
 		Base_HeartbeatStruct->isPublic = Config_GetBoolByKey(Base_ConfigStore, "heartbeat-public");
