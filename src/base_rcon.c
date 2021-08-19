@@ -10,8 +10,7 @@
 
 extern CStore *Base_ConfigStore;
 Socket Rcon_Socket;
-cs_str Rcon_Password, Rcon_IP;
-cs_uint16 Rcon_Port;
+cs_str Rcon_Password;
 
 typedef struct {
   cs_int32 size, id, cmd;
@@ -148,18 +147,19 @@ THREAD_FUNC(RconAccept) {
 
 void Base_Rcon(void) {
   if(Config_GetBoolByKey(Base_ConfigStore, "rcon-enabled")) {
-    if(!String_Length((Rcon_Password = Config_GetStrByKey(Base_ConfigStore, "rcon-password")))) {
-      Log_Warn("Can't start RCON server: \"rcon-password\" cannot be empty!");
+    Rcon_Password = Config_GetStrByKey(Base_ConfigStore, "rcon-password");
+    if(String_Length(Rcon_Password) < 8) {
+      Log_Warn("Can't start RCON server: \"rcon-password\" must be at least 8 characters long.");
       return;
-    }
-    Rcon_IP = Config_GetStrByKey(Server_Config, "server-ip");
-    Rcon_Port = Config_GetInt16ByKey(Base_ConfigStore, "rcon-port");
+    } else Rcon_Password = String_AllocCopy(Rcon_Password);
+    cs_str ip = Config_GetStrByKey(Server_Config, "server-ip");
+    cs_uint16 port = Config_GetInt16ByKey(Base_ConfigStore, "rcon-port");
     if((Rcon_Socket = Socket_New()) == INVALID_SOCKET) {
       Error_PrintSys(false);
       return;
     }
     struct sockaddr_in ssa;
-    switch (Socket_SetAddr(&ssa, Rcon_IP, Rcon_Port)) {
+    switch (Socket_SetAddr(&ssa, ip, port)) {
       case 0:
         ERROR_PRINT(ET_SERVER, EC_INVALIDIP, false);
         return;
@@ -171,7 +171,7 @@ void Base_Rcon(void) {
       Socket_Close(Rcon_Socket);
       Error_PrintSys(false);
     } else {
-      Log_Info("RCON server started on %s:%d", Rcon_IP, Rcon_Port);
+      Log_Info("RCON server started on %s:%d", ip, port);
       Thread_Create(RconAccept, NULL, true);
     }
   }
