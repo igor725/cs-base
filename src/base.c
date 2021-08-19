@@ -11,6 +11,7 @@ void Base_OnStop(void *);
 void Base_OnSpawn(void *);
 void Base_OnHandshake(void *);
 void Base_Commands(void);
+void Base_Heartbeat(void);
 
 LGroup *Base_Lang;
 CStore *Base_ConfigStore;
@@ -64,6 +65,7 @@ cs_bool Plugin_Load(void) {
   Base_Chat();
   Base_Rcon();
   Base_Commands();
+  Base_Heartbeat();
   Event_RegisterVoid(EVT_ONHANDSHAKEDONE, Base_OnHandshake);
   Event_RegisterVoid(EVT_ONSPAWN, Base_OnSpawn);
   Event_RegisterVoid(EVT_ONSTOP, Base_OnStop);

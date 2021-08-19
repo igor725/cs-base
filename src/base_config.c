@@ -47,6 +47,19 @@ void Base_Config(void) {
   Config_SetComment(ent, "Enable or disable player (dis-)connection notifications.");
   Config_SetDefaultBool(ent, true);
 
+  ent = Config_NewEntry(Base_ConfigStore, "heartbeat-cc-enabled", CFG_TBOOL);
+  Config_SetComment(ent, "Enable ClassiCube heartbeat.");
+  Config_SetDefaultBool(ent, false);
+
+  ent = Config_NewEntry(Base_ConfigStore, "heartbeat-delay", CFG_TINT8);
+  Config_SetComment(ent, "Heartbeat request delay. [1-60]");
+  Config_SetLimit(ent, 1, 60);
+  Config_SetDefaultInt8(ent, 10);
+
+  ent = Config_NewEntry(Base_ConfigStore, "heartbeat-public", CFG_TBOOL);
+  Config_SetComment(ent, "Show server in the ClassiCube server list.");
+  Config_SetDefaultBool(ent, false);
+
   Base_ConfigStore->modified = true;
   if(!Config_Load(Base_ConfigStore)) {
     Config_PrintError(Base_ConfigStore);
