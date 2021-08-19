@@ -127,7 +127,7 @@ COMMAND_FUNC(CFG) {
 				case CFG_TSTR:
 					Config_SetStr(ent, value);
 					break;
-				case CFG_TINVALID:
+				default:
 					COMMAND_PRINT("Can't detect entry type.");
 			}
 			COMMAND_PRINT("Entry value changed successfully.");
@@ -138,10 +138,11 @@ COMMAND_FUNC(CFG) {
 
 			CEntry *ent = Config_GetEntry(Server_Config, key);
 			if(ent) {
-				if(!Config_ToStr(ent, value, CFG_MAX_LEN)) {
-					COMMAND_PRINT("Can't detect entry type.");
+				if(Config_ToStr(ent, value, CFG_MAX_LEN)) {
+					COMMAND_PRINTF("%s = %s (%s)", key, value, Config_TypeName(ent->type));
+				} else {
+					COMMAND_PRINT("Config_ToStr() == 0??");
 				}
-				COMMAND_PRINTF("%s = %s (%s)", key, value, Config_TypeName(ent->type));
 			}
 			COMMAND_PRINT("This entry not found in \"server.cfg\" store.");
 		} else if(String_CaselessCompare(subcommand, "print")) {
@@ -152,6 +153,8 @@ COMMAND_FUNC(CFG) {
 				if(Config_ToStr(ent, value, CFG_MAX_LEN)) {
 					cs_str type = Config_TypeName(ent->type);
 					COMMAND_APPENDF(key, CFG_MAX_LEN, "\r\n%s = %s (%s)", ent->key, value, type)
+				} else {
+					COMMAND_APPENDF(key, CFG_MAX_LEN, "\r\n%s - Config_ToStr() == 0??");
 				}
 				ent = ent->next;
 			}
