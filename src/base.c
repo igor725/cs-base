@@ -72,4 +72,10 @@ cs_bool Plugin_Load(void) {
   return true;
 }
 
-cs_bool Plugin_Unload(void) {return false;}
+cs_bool Plugin_Unload(cs_bool force) {
+  if(force) {
+    // TODO: Cleanup
+    return true;
+  }
+  return false;
+}

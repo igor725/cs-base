@@ -197,7 +197,7 @@ COMMAND_FUNC(Plugins) {
 			if(!plugin) {
 				COMMAND_PRINTF(Lang_Get(Base_Lang, 5), name);
 			}
-			if(Plugin_UnloadDll(plugin)) {
+			if(Plugin_UnloadDll(plugin, false)) {
 				COMMAND_PRINTF(Lang_Get(Base_Lang, 7), name);
 			} else {
 				COMMAND_PRINTF(Lang_Get(Base_Lang, 8), name);
