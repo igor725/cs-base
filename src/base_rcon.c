@@ -108,9 +108,9 @@ static cs_bool handlerconpacket(RClient *client) {
 }
 
 static cs_bool handlerconclient(RClient *client) {
-  if(Socket_Receive(client->fd, (cs_char *)&client->packet.size, 4, 0) == 4) {
+  if(Socket_Receive(client->fd, (cs_char *)&client->packet.size, 4, MSG_WAITALL) == 4) {
     if(client->packet.size < 10 || client->packet.size > MAX_CMD_OUT) return false;
-    if(Socket_Receive(client->fd, (cs_char *)&client->packet + 4, client->packet.size, 0) == client->packet.size)
+    if(Socket_Receive(client->fd, (cs_char *)&client->packet + 4, client->packet.size, MSG_WAITALL) == client->packet.size)
       return handlerconpacket(client);
   }
   return false;
