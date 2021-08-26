@@ -33,8 +33,8 @@ cs_bool Plugin_Load(void) {
   Base_Lang = Lang_NewGroup(20);
 
   // Notifications
-  Lang_Set(Base_Lang, 0, "Player %s connected with %s.");
-  Lang_Set(Base_Lang, 1, "Player %s disconnected.");
+  Lang_Set(Base_Lang, 0, "&ePlayer %s connected with %s.");
+  Lang_Set(Base_Lang, 1, "&ePlayer %s disconnected.");
 
   // "Info" command
 	Lang_Set(Base_Lang, 2, "CServer/%s with PluginAPI v%03d runned on %s");
