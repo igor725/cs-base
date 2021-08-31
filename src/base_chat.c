@@ -4,10 +4,8 @@
 #include <event.h>
 #include <server.h>
 #include <log.h>
-#include <lang.h>
 #include <str.h>
 
-extern LGroup *Base_Lang;
 extern CStore *Base_ConfigStore;
 
 static void onspawnfunc(void *param) {
@@ -19,7 +17,7 @@ static void onspawnfunc(void *param) {
   if(pd->firstSpawn) {
     cs_str name = Client_GetName(client);
     cs_str appname = Client_GetAppName(client);
-    if(String_FormatBuf(message, 154, Lang_Get(Base_Lang, 0), name, appname)) {
+    if(String_FormatBuf(message, 154, "&ePlayer %s connected with %s.", name, appname)) {
       Client_Chat(Broadcast, MT_CHAT, message);
       Log_Info(message + 2);
     }
@@ -32,7 +30,7 @@ static void ondisconnectfunc(void *param) {
   Client *client = (Client *)param;
   if(client->playerData->firstSpawn) return;
   cs_char message[88];
-  if(String_FormatBuf(message, 88, Lang_Get(Base_Lang, 1), Client_GetName(client))) {
+  if(String_FormatBuf(message, 88, "&ePlayer %s disconnected.", Client_GetName(client))) {
     Client_Chat(Broadcast, MT_CHAT, message);
     Log_Info(message + 2);
   }

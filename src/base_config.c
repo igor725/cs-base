@@ -2,13 +2,11 @@
 #include <log.h>
 #include <str.h>
 #include <list.h>
-#include <lang.h>
 #include <config.h>
 #include <client.h>
 #include <platform.h>
 #include "base_lists.h"
 
-extern LGroup *Base_Lang;
 extern CStore *Base_ConfigStore;
 BList operators = {
   .alerted = false,
@@ -93,7 +91,7 @@ void Base_OnSpawn(Client *cl) {
 
 void Base_OnHandshake(Client *cl) {
   if(Base_CheckList(&bans, Client_GetName(cl)))
-    Client_Kick(cl, Lang_Get(Base_Lang, 17));
+    Client_Kick(cl, "You are banned!");
 }
 
 void Base_OnStop(void) {

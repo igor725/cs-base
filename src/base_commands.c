@@ -3,10 +3,8 @@
 #include <command.h>
 #include <server.h>
 #include <plugin.h>
-#include <lang.h>
 #include <generators.h>
 
-extern LGroup *Base_Lang;
 extern cs_char Base_OSName[64];
 cs_bool Base_AddOP(cs_str name);
 cs_bool Base_RemoveOP(cs_str name);
@@ -15,7 +13,7 @@ cs_bool Base_RemoveBan(cs_str name);
 
 COMMAND_FUNC(Info) {
 	COMMAND_PRINTF(
-		Lang_Get(Base_Lang, 2),
+		"CServer/%s with PluginAPI v%03d runned on %s",
 		GIT_COMMIT_SHA,
 		PLUGIN_API_NUM,
     Base_OSName
@@ -58,10 +56,10 @@ COMMAND_FUNC(Ban) {
 	if(COMMAND_GETARG(clientname, 64, 0)) {
 		if(Base_AddBan(clientname)) {
 			Client *client = Client_GetByName(clientname);
-			if(client) Client_Kick(client, Lang_Get(Base_Lang, 17));
-			COMMAND_PRINTF(Lang_Get(Base_Lang, 15), clientname);
+			if(client) Client_Kick(client, "You are banned!");
+			COMMAND_PRINTF("Player %s banned.", clientname);
 		} else {
-			COMMAND_PRINT(Lang_Get(Base_Lang, 18));
+			COMMAND_PRINT("Cannot add this player to the banlist.");
 		}
 	}
 	COMMAND_PRINTUSAGE;
@@ -72,9 +70,9 @@ COMMAND_FUNC(UnBan) {
 	cs_char clientname[64];
 	if(COMMAND_GETARG(clientname, 64, 0)) {
 		if(Base_RemoveBan(clientname)) {
-			COMMAND_PRINTF(Lang_Get(Base_Lang, 16), clientname);
+			COMMAND_PRINTF("Player %s unbanned.", clientname);
 		} else {
-			COMMAND_PRINT(Lang_Get(Base_Lang, 19));
+			COMMAND_PRINT("Failed to remove player from banlist.");
 		}
 	}
 	COMMAND_PRINTUSAGE;
@@ -185,34 +183,34 @@ COMMAND_FUNC(Plugins) {
 			PLUGIN_NAME
 			if(!Plugin_Get(name)) {
 				if(Plugin_LoadDll(name)) {
-					COMMAND_PRINTF(Lang_Get(Base_Lang, 4), name);
+					COMMAND_PRINTF("Plugin \"%s\" loaded.", name);
 				} else {
-					COMMAND_PRINT(Lang_Get(Base_Lang, 9));
+					COMMAND_PRINT("Something went wrong.");
 				}
 			}
-			COMMAND_PRINTF(Lang_Get(Base_Lang, 6), name);
+			COMMAND_PRINTF("Plugin \"%s\" is already loaded.", name);
 		} else if(String_CaselessCompare(subcommand, "unload")) {
 			PLUGIN_NAME
 			plugin = Plugin_Get(name);
 			if(!plugin) {
-				COMMAND_PRINTF(Lang_Get(Base_Lang, 5), name);
+				COMMAND_PRINTF("Plugin \"%s\" not loaded.", name);
 			}
 			if(Plugin_UnloadDll(plugin, false)) {
-				COMMAND_PRINTF(Lang_Get(Base_Lang, 7), name);
+				COMMAND_PRINTF("Plugin \"%s\" successfully unloaded.", name);
 			} else {
-				COMMAND_PRINTF(Lang_Get(Base_Lang, 8), name);
+				COMMAND_PRINTF("Plugin \"%s\" cannot be unloaded.", name);
 			}
 		} else if(String_CaselessCompare(subcommand, "list")) {
 			cs_int32 idx = 1;
 			cs_char pluginfo[64];
-			COMMAND_APPEND(Lang_Get(Base_Lang, 10));
+			COMMAND_APPEND("Loaded plugins list:");
 
 			for(cs_int32 i = 0; i < MAX_PLUGINS; i++) {
 				plugin = Plugins_List[i];
 				if(plugin) {
 					COMMAND_APPENDF(
 						pluginfo, 64,
-						Lang_Get(Base_Lang, 11), idx++,
+						"\r\n  %d.%s v%d", idx++,
 						plugin->name, plugin->version
 					);
 				}
@@ -240,9 +238,9 @@ COMMAND_FUNC(Kick) {
 		if(tg) {
 			cs_str reason = String_FromArgument(ccdata->args, 1);
 			Client_Kick(tg, reason);
-			COMMAND_PRINTF(Lang_Get(Base_Lang, 13), playername);
+			COMMAND_PRINTF("Player %s kicked.", playername);
 		} else {
-			COMMAND_PRINTF(Lang_Get(Lang_CmdGrp, 2));
+			COMMAND_PRINTF("Player not found.");
 		}
 	}
 

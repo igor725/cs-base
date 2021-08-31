@@ -6,7 +6,6 @@
 #include <platform.h>
 #include <server.h>
 #include <command.h>
-#include <lang.h>
 
 extern CStore *Base_ConfigStore;
 Socket Rcon_Socket;
@@ -59,7 +58,7 @@ static void rconcommandhandler(RClient *client, cs_char *str) {
 	Command *cmd = Command_GetByName(str);
 	if(cmd) {
 		if(cmd->flags & CMDF_CLIENT) {
-			setrconpayload(&client->packet, Lang_Get(Lang_CmdGrp, 4));
+			setrconpayload(&client->packet, "This command can't be called from console.");
 			return;
 		}
 
@@ -73,7 +72,7 @@ static void rconcommandhandler(RClient *client, cs_char *str) {
 		if(cmd->func(&ccdata))
       setrconpayload(&client->packet, ret);
 	} else {
-    setrconpayload(&client->packet, Lang_Get(Lang_CmdGrp, 3));
+    setrconpayload(&client->packet, "Unknown command.");
   }
 }
 
