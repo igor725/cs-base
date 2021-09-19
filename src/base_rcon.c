@@ -1,7 +1,7 @@
 #include <core.h>
 #include <str.h>
 #include <log.h>
-#include <error.h>
+#include <cserror.h>
 #include <config.h>
 #include <platform.h>
 #include <server.h>
