@@ -11,10 +11,9 @@ extern CStore *Base_ConfigStore;
 static void onspawnfunc(void *param) {
   if(!Config_GetBoolByKey(Base_ConfigStore, "connect-notifications")) return;
   Client *client = (Client *)param;
-  PlayerData *pd = client->playerData;
   char message[154];
 
-  if(pd->firstSpawn) {
+  if(client->playerData->firstSpawn) {
     cs_str name = Client_GetName(client);
     cs_str appname = Client_GetAppName(client);
     if(String_FormatBuf(message, 154, "&ePlayer %s connected with %s.", name, appname)) {
