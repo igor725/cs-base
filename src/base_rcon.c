@@ -23,7 +23,7 @@ typedef struct {
   RPacket packet;
 } RClient;
 
-static void makeitsafe(cs_char *str) {
+INL static void makeitsafe(cs_char *str) {
   if(*str == '\0') return;
   while(*str != '\0') {
     if(*str < ' ' || *str > '~')
@@ -32,12 +32,12 @@ static void makeitsafe(cs_char *str) {
   }
 }
 
-static void setrconpayload(RPacket *packet, cs_str string) {
+INL static void setrconpayload(RPacket *packet, cs_str string) {
   cs_int32 strsize = (cs_int32)String_Copy(packet->payload, MAX_CMD_OUT - 2, string);
   packet->size = max(10, strsize + 9);
 }
 
-static void rconcommandhandler(RClient *client, cs_char *str) {
+INL static void rconcommandhandler(RClient *client, cs_char *str) {
 	if(*str == '/') ++str;
 
 	cs_char ret[MAX_CMD_OUT];
@@ -106,7 +106,7 @@ static cs_bool handlerconpacket(RClient *client) {
   return Socket_Send(client->fd, (cs_char *)&client->packet, client->packet.size + 4) == client->packet.size + 4;
 }
 
-static cs_bool handlerconclient(RClient *client) {
+INL static cs_bool handlerconclient(RClient *client) {
   if(Socket_Receive(client->fd, (cs_char *)&client->packet.size, 4, MSG_WAITALL) == 4) {
     if(client->packet.size < 10 || client->packet.size > MAX_CMD_OUT) return false;
     if(Socket_Receive(client->fd, (cs_char *)&client->packet + 4, client->packet.size, MSG_WAITALL) == client->packet.size)
