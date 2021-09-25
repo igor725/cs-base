@@ -321,8 +321,9 @@ COMMAND_FUNC(UnlWorld) {
 			COMMAND_PRINT("Can't unload main world.");
 		}
 		for(ClientID i = 0; i < MAX_CLIENTS; i++) {
-			Client *c = Clients_List[i];
-			if(c && Client_IsInWorld(c, tmp)) Client_ChangeWorld(c, (World *)World_Head->value.ptr);
+			Client *client = Clients_List[i];
+			if(client && Client_IsInWorld(client, tmp))
+				Client_ChangeWorld(client, (World *)World_Head->value.ptr);
 		}
 		if(World_Save(tmp, true)) {
 			COMMAND_PRINT("World unloaded.");
