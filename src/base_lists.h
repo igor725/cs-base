@@ -3,9 +3,9 @@
 #include <list.h>
 
 typedef struct {
-  cs_bool alerted;
-  cs_str filename;
-  AListField *head;
+	cs_bool alerted;
+	cs_str filename;
+	AListField *head;
 } BList;
 
 cs_bool Base_LoadList(BList *list);

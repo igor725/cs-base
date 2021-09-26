@@ -108,19 +108,19 @@ COMMAND_FUNC(CFG) {
 			}
 
 			switch (ent->type) {
-				case CFG_TINT32:
+				case CONFIG_TYPE_INT32:
 					Config_SetInt32(ent, String_ToInt(value));
 					break;
-				case CFG_TINT16:
+				case CONFIG_TYPE_INT16:
 					Config_SetInt16(ent, (cs_int16)String_ToInt(value));
 					break;
-				case CFG_TINT8:
+				case CONFIG_TYPE_INT8:
 					Config_SetInt8(ent, (cs_int8)String_ToInt(value));
 					break;
-				case CFG_TBOOL:
+				case CONFIG_TYPE_BOOL:
 					Config_SetBool(ent, String_CaselessCompare(value, "True"));
 					break;
-				case CFG_TSTR:
+				case CONFIG_TYPE_STR:
 					Config_SetStr(ent, value);
 					break;
 				default:
@@ -298,7 +298,8 @@ COMMAND_FUNC(GenWorld) {
 			else
 				success = Generators_Use(tmp, "flat", NULL);
 
-			if(success && World_Add(tmp)) {
+			if(success) {
+				World_Add(tmp);
 				COMMAND_PRINTF("World \"%s\" created.", worldname);
 			} else {
 				World_Free(tmp);
