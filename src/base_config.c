@@ -5,7 +5,10 @@
 #include <config.h>
 #include <client.h>
 #include <platform.h>
+#include <strstor.h>
 #include "base_lists.h"
+
+#define BASECFG "base.cfg"
 
 extern CStore *Base_ConfigStore;
 BList operators = {
@@ -26,7 +29,7 @@ void Base_Config(void) {
 	if(!Base_LoadList(&bans))
 		Log_Error("Failed to load bans.txt.");
 
-	Base_ConfigStore = Config_NewStore("base.cfg");
+	Base_ConfigStore = Config_NewStore(BASECFG);
 	CEntry *ent;
 
 	ent = Config_NewEntry(Base_ConfigStore, "rcon-enabled", CONFIG_TYPE_BOOL);
@@ -60,8 +63,16 @@ void Base_Config(void) {
 
 	Base_ConfigStore->modified = true;
 	if(!Config_Load(Base_ConfigStore)) {
-		Config_PrintError(Base_ConfigStore);
-		Process_Exit(1);
+		cs_int32 line = 0;
+		ECExtra extra = CONFIG_EXTRA_NOINFO;
+		ECError code = Config_PopError(Base_ConfigStore, &extra, &line);
+		if(line > 0)
+			Log_Error(Sstor_Get("SV_CFGL_ERR"), line, BASECFG, code, extra);
+		else
+			Log_Error(Sstor_Get("SV_CFG_ERR"), "parse", BASECFG, code, extra);
+		
+		Base_ConfigStore->modified = false;
+		Config_ResetToDefault(Base_ConfigStore);
 	}
 
 	Config_Save(Base_ConfigStore);
