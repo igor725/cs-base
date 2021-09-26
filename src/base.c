@@ -44,6 +44,7 @@ cs_bool Plugin_Unload(cs_bool force) {
     EVENT_UNREGISTER(EVT_ONHANDSHAKEDONE, Base_OnHandshake);
     EVENT_UNREGISTER(EVT_ONSPAWN, Base_OnSpawn);
     EVENT_UNREGISTER(EVT_ONSTOP, Base_OnStop);
+    Config_DestroyStore(Base_ConfigStore);
     return true;
   }
   return false;
