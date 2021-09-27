@@ -253,6 +253,7 @@ COMMAND_FUNC(SetModel) {
 		if(!Client_SetModelStr(ccdata->caller, modelname)) {
 			COMMAND_PRINT("Invalid model name.");
 		}
+		Client_Update(ccdata->caller);
 		COMMAND_PRINT("Model changed successfully.");
 	}
 
