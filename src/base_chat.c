@@ -13,7 +13,7 @@ static void onspawnfunc(void *param) {
 	Client *client = (Client *)param;
 	char message[154];
 
-	if(client->playerData->firstSpawn) {
+	if(Client_IsFirstSpawn(client)) {
 		cs_str name = Client_GetName(client);
 		cs_str appname = Client_GetAppName(client);
 		if(String_FormatBuf(message, 154, "&ePlayer %s connected with %s.", name, appname)) {
@@ -27,7 +27,7 @@ static void ondisconnectfunc(void *param) {
 	if(!Server_Active) return;
 	if(!Config_GetBoolByKey(Base_ConfigStore, "connect-notifications")) return;
 	Client *client = (Client *)param;
-	if(client->playerData->firstSpawn) return;
+	if(Client_IsFirstSpawn(client)) return;
 	cs_char message[88];
 	if(String_FormatBuf(message, 88, "&ePlayer %s disconnected.", Client_GetName(client))) {
 		Client_Chat(Broadcast, MESSAGE_TYPE_CHAT, message);

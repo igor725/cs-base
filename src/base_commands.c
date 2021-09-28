@@ -24,7 +24,7 @@ COMMAND_FUNC(MakeOp) {
 	if(COMMAND_GETARG(clientname, 64, 0)) {
 		if(Base_AddOP(clientname)) {
 			Client *client = Client_GetByName(clientname);
-			if(client) client->playerData->isOP = true;
+			if(client) Client_SetOP(client, true);
 			COMMAND_PRINTF("Player %s added to the OPs list.", clientname);
 		} else {
 			COMMAND_PRINT("Failed to add player to OPs list.");
@@ -39,7 +39,7 @@ COMMAND_FUNC(DeOp) {
 	if(COMMAND_GETARG(clientname, 64, 0)) {
 		if(Base_RemoveOP(clientname)) {
 			Client *client = Client_GetByName(clientname);
-			if(client) client->playerData->isOP = false;
+			if(client) Client_SetOP(client, false);
 			COMMAND_PRINTF("Player %s removed from the OPs list.", clientname);
 		} else {
 			COMMAND_PRINT("Failed to remove player from OPs list.");
@@ -107,7 +107,7 @@ COMMAND_FUNC(CFG) {
 				COMMAND_PRINTUSAGE;
 			}
 
-			switch (ent->type) {
+			switch (Config_GetEntryType(ent)) {
 				case CONFIG_TYPE_INT32:
 					Config_SetInt32(ent, String_ToInt(value));
 					break;
@@ -135,7 +135,7 @@ COMMAND_FUNC(CFG) {
 			CEntry *ent = Config_GetEntry(Server_Config, key);
 			if(ent) {
 				if(Config_ToStr(ent, value, CFG_MAX_LEN)) {
-					COMMAND_PRINTF("%s = %s (%s)", key, value, Config_TypeName(ent->type));
+					COMMAND_PRINTF("%s = %s (%s)", key, value, Config_GetEntryTypeName(ent));
 				} else {
 					COMMAND_PRINT("Config_ToStr() == 0??");
 				}
@@ -147,8 +147,8 @@ COMMAND_FUNC(CFG) {
 
 			while(ent) {
 				if(Config_ToStr(ent, value, CFG_MAX_LEN)) {
-					cs_str type = Config_TypeName(ent->type);
-					COMMAND_APPENDF(key, CFG_MAX_LEN, "\r\n%s = %s (%s)", ent->key, value, type)
+					COMMAND_APPENDF(key, CFG_MAX_LEN, "\r\n%s = %s (%s)",
+					Config_GetEntryKey(ent), value, Config_GetEntryTypeName(ent));
 				} else {
 					COMMAND_APPENDF(key, CFG_MAX_LEN, "\r\n%s - Config_ToStr() == 0??");
 				}
