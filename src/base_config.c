@@ -66,12 +66,18 @@ void Base_Config(void) {
 		cs_int32 line = 0;
 		ECExtra extra = CONFIG_EXTRA_NOINFO;
 		ECError code = Config_PopError(Base_ConfigStore, &extra, &line);
-		if(line > 0)
-			Log_Error(Sstor_Get("SV_CFGL_ERR"), line, BASECFG, code, extra);
-		else
-			Log_Error(Sstor_Get("SV_CFG_ERR"), "parse", BASECFG, code, extra);
-		
-		Base_ConfigStore->modified = false;
+		if(extra == CONFIG_EXTRA_IO_LINEASERROR) {
+			if(line != ENOENT)
+				Log_Error(Sstor_Get("SV_CFG_ERR2"), "open", BASECFG, Config_ErrorToString(code), extra);
+		} else {
+			cs_str scode = Config_ErrorToString(code), 
+			sextra = Config_ExtraToString(extra);
+			if(line > 0)
+				Log_Error(Sstor_Get("SV_CFGL_ERR"), line, BASECFG, scode, sextra);
+			else
+				Log_Error(Sstor_Get("SV_CFG_ERR"), "parse", BASECFG, scode, sextra);
+		}
+
 		Config_ResetToDefault(Base_ConfigStore);
 	}
 
