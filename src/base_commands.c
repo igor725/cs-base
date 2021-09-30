@@ -317,15 +317,16 @@ COMMAND_FUNC(UnlWorld) {
 
 	cs_char worldname[64];
 	COMMAND_ARG2WN(worldname, 0)
-	World *tmp = World_GetByName(worldname);
+	World *tmp = World_GetByName(worldname),
+	*main = (World *)AList_GetValue(World_Head).ptr;
 	if(tmp) {
-		if((World *)World_Head->value.ptr == tmp) {
+		if(main == tmp) {
 			COMMAND_PRINT("Can't unload main world.");
 		}
 		for(ClientID i = 0; i < MAX_CLIENTS; i++) {
 			Client *client = Clients_List[i];
 			if(client && Client_IsInWorld(client, tmp))
-				Client_ChangeWorld(client, (World *)World_Head->value.ptr);
+				Client_ChangeWorld(client, main);
 		}
 		if(World_Save(tmp, true)) {
 			COMMAND_PRINT("World unloaded.");
@@ -353,7 +354,7 @@ COMMAND_FUNC(SavWorld) {
 }
 
 void Base_Commands(void) {
-	COMMAND_ADD(Info, CMDF_OP);
+	COMMAND_ADD(Info, CMDF_NONE);
 	COMMAND_ADD(MakeOp, CMDF_OP);
 	COMMAND_ADD(DeOp, CMDF_OP);
 	COMMAND_ADD(Ban, CMDF_OP);
