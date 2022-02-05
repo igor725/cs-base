@@ -354,19 +354,19 @@ COMMAND_FUNC(SavWorld) {
 }
 
 void Base_Commands(void) {
-	COMMAND_ADD(Info, CMDF_NONE);
-	COMMAND_ADD(MakeOp, CMDF_OP);
-	COMMAND_ADD(DeOp, CMDF_OP);
-	COMMAND_ADD(Ban, CMDF_OP);
-	COMMAND_ADD(UnBan, CMDF_OP);
-	COMMAND_ADD(Uptime, CMDF_NONE);
-	COMMAND_ADD(CFG, CMDF_OP);
-	COMMAND_ADD(Plugins, CMDF_OP);
-	COMMAND_ADD(Stop, CMDF_OP);
-	COMMAND_ADD(Kick, CMDF_OP);
-	COMMAND_ADD(SetModel, CMDF_OP | CMDF_CLIENT);
-	COMMAND_ADD(ChgWorld, CMDF_OP | CMDF_CLIENT);
-	COMMAND_ADD(GenWorld, CMDF_OP);
-	COMMAND_ADD(UnlWorld, CMDF_OP);
-	COMMAND_ADD(SavWorld, CMDF_OP);
+	COMMAND_ADD(Info, CMDF_NONE, "Prints server software info");
+	COMMAND_ADD(MakeOp, CMDF_OP, "Grant operator status to a player");
+	COMMAND_ADD(DeOp, CMDF_OP, "Revokes operator status from a player");
+	COMMAND_ADD(Ban, CMDF_OP, "Adds player to banlist");
+	COMMAND_ADD(UnBan, CMDF_OP, "Removes player from banlist");
+	COMMAND_ADD(Uptime, CMDF_NONE, "Prints server uptime");
+	COMMAND_ADD(CFG, CMDF_OP, "Server config manager");
+	COMMAND_ADD(Plugins, CMDF_OP, "Server plugin manager");
+	COMMAND_ADD(Stop, CMDF_OP, "Stops a server");
+	COMMAND_ADD(Kick, CMDF_OP, "Kicks a player off a server");
+	COMMAND_ADD(SetModel, CMDF_OP | CMDF_CLIENT, "Sets player model");
+	COMMAND_ADD(ChgWorld, CMDF_OP | CMDF_CLIENT, "Teleports you to another world");
+	COMMAND_ADD(GenWorld, CMDF_OP, "Generates new world");
+	COMMAND_ADD(UnlWorld, CMDF_OP, "Unloads specified world");
+	COMMAND_ADD(SavWorld, CMDF_OP, "Forces world save process");
 }
