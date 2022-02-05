@@ -77,13 +77,12 @@ COMMAND_FUNC(UnBan) {
 }
 
 COMMAND_FUNC(Uptime) {
-	cs_uint64 msec, d, h, m, s, ms;
-	msec = Time_GetMSec() - Server_StartTime;
-	d = msec / 86400000;
-	h = (msec % 86400000) / 3600000;
-	m = (msec / 60000) % 60000;
-	s = (msec / 1000) % 60;
-	ms = msec % 1000;
+	cs_uint32 diff = (cs_uint32)(Time_GetMSec() - Server_StartTime);
+	cs_uint32 d = diff / 86400000,
+	h = (diff % 86400000) / 3600000,
+	m = (diff / 60000) % 60000,
+	s = (diff / 1000) % 60,
+	ms = diff % 1000;
 	COMMAND_PRINTF(
 		"Server uptime: %03d:%02d:%02d:%02d.%03d",
 		d, h, m, s, ms
