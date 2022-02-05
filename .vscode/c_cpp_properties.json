@@ -1,6 +1,19 @@
 {
     "configurations": [
         {
+            "name": "Linux",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "${workspaceFolder}/../core/src"
+            ],
+            "defines": [
+                "CORE_BUILD_PLUGIN"
+            ],
+            "cStandard": "c11",
+            "cppStandard": "c++14",
+            "intelliSenseMode": "linux-clang-arm"
+        },
+        {
             "name": "Win64",
             "includePath": [
                 "${workspaceFolder}/**",
