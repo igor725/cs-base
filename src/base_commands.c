@@ -259,6 +259,29 @@ COMMAND_FUNC(SetModel) {
 	COMMAND_PRINTUSAGE;
 }
 
+COMMAND_FUNC(SetWeather) {
+	COMMAND_SETUSAGE("/setweather <weathertype>");
+
+	World *world = Client_GetWorld(ccdata->caller);
+	if(!world) {
+		COMMAND_PRINT("Something went wrong");
+	}
+
+	cs_char weathername[64];
+	if(COMMAND_GETARG(weathername, 64, 0)) {
+		EWorldWeather weather = WORLD_WEATHER_SUN;
+		if(String_CaselessCompare(weathername, "snow"))
+			weather = WORLD_WEATHER_SNOW;
+		else if(String_CaselessCompare(weathername, "rain"))
+			weather = WORLD_WEATHER_RAIN;
+		World_SetWeather(world, weather);
+		Clients_UpdateWorldInfo(world);
+		COMMAND_PRINT("Weather changed");
+	}
+
+	COMMAND_PRINTUSAGE;
+}
+
 COMMAND_FUNC(ChgWorld) {
 	COMMAND_SETUSAGE("/chgworld <worldname>");
 
@@ -364,6 +387,7 @@ void Base_Commands(void) {
 	COMMAND_ADD(Stop, CMDF_OP, "Stops a server");
 	COMMAND_ADD(Kick, CMDF_OP, "Kicks a player off a server");
 	COMMAND_ADD(SetModel, CMDF_OP | CMDF_CLIENT, "Sets player model");
+	COMMAND_ADD(SetWeather, CMDF_OP | CMDF_CLIENT, "Sets weather in current world");
 	COMMAND_ADD(ChgWorld, CMDF_OP | CMDF_CLIENT, "Teleports you to another world");
 	COMMAND_ADD(GenWorld, CMDF_OP, "Generates new world");
 	COMMAND_ADD(UnlWorld, CMDF_OP, "Unloads specified world");
