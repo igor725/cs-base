@@ -16,6 +16,13 @@ CStore *Base_ConfigStore;
 cs_char Base_OSName[64];
 Plugin_SetVersion(1)
 
+EventRegBunch events[] = {
+	{'v', EVT_ONHANDSHAKEDONE, (void *)Base_OnHandshake},
+	{'v', EVT_ONSPAWN, (void *)Base_OnSpawn},
+	{'v', EVT_ONSTOP, (void *)Base_OnStop},
+	{0, 0, NULL}
+};
+
 cs_bool Plugin_Load(void) {
 #if defined(WINDOWS)
 	String_Copy(Base_OSName, 64, "Windows");
@@ -33,17 +40,12 @@ cs_bool Plugin_Load(void) {
 	Base_Rcon();
 	Base_Commands();
 	Base_Heartbeat();
-	Event_RegisterVoid(EVT_ONHANDSHAKEDONE, Base_OnHandshake);
-	Event_RegisterVoid(EVT_ONSPAWN, Base_OnSpawn);
-	Event_RegisterVoid(EVT_ONSTOP, Base_OnStop);
-	return true;
+	return Event_RegisterBunch(events);
 }
 
 cs_bool Plugin_Unload(cs_bool force) {
 	if(force) {
-		EVENT_UNREGISTER(EVT_ONHANDSHAKEDONE, Base_OnHandshake);
-		EVENT_UNREGISTER(EVT_ONSPAWN, Base_OnSpawn);
-		EVENT_UNREGISTER(EVT_ONSTOP, Base_OnStop);
+		Event_UnregisterBunch(events);
 		Config_DestroyStore(Base_ConfigStore);
 		return true;
 	}
