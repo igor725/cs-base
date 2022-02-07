@@ -24,9 +24,9 @@ EventRegBunch events[] = {
 };
 
 cs_bool Plugin_Load(void) {
-#if defined(WINDOWS)
+#if defined(CORE_USE_WINDOWS)
 	String_Copy(Base_OSName, 64, "Windows");
-#elif defined(UNIX)
+#elif defined(CORE_USE_UNIX)
 	cs_file uname = File_ProcOpen("uname -osm", "r");
 	if(uname) {
 		File_ReadLine(uname, Base_OSName, 64);
