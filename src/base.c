@@ -6,6 +6,7 @@
 void Base_Rcon(void);
 void Base_Chat(void);
 void Base_Config(void);
+void Base_DayNight(void);
 void Base_OnStop(void *);
 void Base_OnSpawn(void *);
 void Base_OnHandshake(void *);
@@ -38,6 +39,7 @@ cs_bool Plugin_Load(void) {
 	Base_Config();
 	Base_Chat();
 	Base_Rcon();
+	Base_DayNight();
 	Base_Commands();
 	Base_Heartbeat();
 	return Event_RegisterBunch(events);
