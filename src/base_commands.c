@@ -275,7 +275,7 @@ COMMAND_FUNC(SetWeather) {
 		else if(String_CaselessCompare(weathername, "rain"))
 			weather = WORLD_WEATHER_RAIN;
 		World_SetWeather(world, weather);
-		Clients_UpdateWorldInfo(world);
+		World_FinishEnvUpdate(world);
 		COMMAND_PRINT("Weather changed");
 	}
 

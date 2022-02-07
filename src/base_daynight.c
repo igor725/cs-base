@@ -44,7 +44,7 @@ static void installColor(World *world, struct _ColorPreset *preset) {
 	World_SetEnvColor(world, WORLD_COLOR_FOG, &preset->fog);
 	World_SetEnvColor(world, WORLD_COLOR_CLOUD, &preset->cloud);
 	World_SetEnvColor(world, WORLD_COLOR_SKY, &preset->sky);
-	Clients_UpdateWorldInfo(world);
+	World_FinishEnvUpdate(world);
 }
 
 static void UpdateWorldTime(World *world) {
