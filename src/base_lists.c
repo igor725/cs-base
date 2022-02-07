@@ -6,13 +6,15 @@
 cs_bool Base_LoadList(BList *list) {
 	list->alerted = false;
 	cs_file fp = File_Open(list->filename, "r");
-	if(!fp) return false;
-
 	cs_char buffer[64];
-	while(File_ReadLine(fp, buffer, 64) > 0)
-		AList_AddField(&list->head, (cs_char *)String_AllocCopy(buffer));
 
-	File_Close(fp);
+	if(fp) {
+		while(File_ReadLine(fp, buffer, 64) > 0)
+			AList_AddField(&list->head, (cs_char *)String_AllocCopy(buffer));
+
+		File_Close(fp);
+	}
+
 	return true;
 }
 
@@ -25,11 +27,13 @@ static cs_bool SaveIterator(AListField *ptr, AListField **head, void *ud) {
 cs_bool Base_SaveList(BList *list) {
 	if(!list->alerted) return true;
 	cs_file fp = File_Open(list->filename, "w");
-	if(!fp) return false;
+	cs_bool success = false;
 
-	cs_bool success = AList_Iter(&list->head, fp, SaveIterator);
+	if(fp) {
+		success = AList_Iter(&list->head, fp, SaveIterator);
+		File_Close(fp);
+	}
 
-	File_Close(fp);
 	return success;
 }
 

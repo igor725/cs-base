@@ -104,7 +104,6 @@ cs_bool Base_RemoveBan(cs_str name) {
 	return Base_RemoveList(&bans, name);
 }
 
-
 void Base_OnSpawn(Client *client) {
 	if(Client_IsFirstSpawn(client) && !Client_IsOP(client))
 		Client_SetOP(client, Base_CheckList(&operators, Client_GetName(client)));
