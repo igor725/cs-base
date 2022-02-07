@@ -66,6 +66,7 @@ static void UpdateWorldTime(World *world) {
 }
 
 TIMER_FUNC(DNCycle) {
+	(void)ticks; (void)left;
 	if(Config_GetBool((CEntry *)ud)) {
 		AListField *tmp;
 		List_Iter(tmp, World_Head) {
