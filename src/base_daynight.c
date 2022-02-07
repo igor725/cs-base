@@ -8,8 +8,8 @@
 
 extern CStore *Base_ConfigStore;
 AssocType DayNightType;
-const cs_int32 DayLength = 120,
-NightLength = 140;
+const cs_int32 DayLength = 360,
+NightLength = 480;
 
 static struct _ColorPreset {
 	Color3 diffuse, ambient,
