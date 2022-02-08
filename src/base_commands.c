@@ -282,51 +282,124 @@ COMMAND_FUNC(SetWeather) {
 	COMMAND_PRINTUSAGE;
 }
 
-COMMAND_FUNC(ChgWorld) {
-	COMMAND_SETUSAGE("/chgworld <worldname>");
+COMMAND_FUNC(World) {
+	COMMAND_SETUSAGE("/world <create/save/load/unload/generate/info> ...");
 
-	cs_char worldname[64];
-	COMMAND_ARG2WN(worldname, 0)
-	World *world = World_GetByName(worldname);
-	if(world) {
-		if(Client_IsInWorld(ccdata->caller, world)) {
-			COMMAND_PRINT("You already in this world.");
+	cs_char subcmd[64], worldname[64];
+	if(COMMAND_GETARG(subcmd, 64, 0)) {
+		if(COMMAND_GETARG(worldname, 60, 1)) {
+			cs_str wndot = String_LastChar(worldname, '.');
+			if(!wndot || !String_CaselessCompare(wndot, ".cws"))
+			String_Append(worldname, 64, ".cws");
 		}
-		if(Client_ChangeWorld(ccdata->caller, world)) return false;
-	}
-	COMMAND_PRINT("World not found.");
-}
 
-COMMAND_FUNC(GenWorld) {
-	COMMAND_SETUSAGE("/genworld <name> <x> <y> <z> [generator]");
+		World *world = World_GetByName(worldname),
+		*mainw = World_Main;
+		cs_int32 argoffset = 2;
 
-	cs_char worldname[64], genname[64], x[6], y[6], z[6];
-	if(COMMAND_GETARG(x, 6, 1) &&
-	COMMAND_GETARG(y, 6, 2) &&
-	COMMAND_GETARG(z, 6, 3)) {
-		cs_int16 _x = (cs_int16)String_ToInt(x),
-		_y = (cs_int16)String_ToInt(y),
-		_z = (cs_int16)String_ToInt(z);
+		if(String_CaselessCompare(subcmd, "create")) {
+			if(world) {
+				COMMAND_PRINT("World with that name already exists");
+			}
+			cs_char xarg[6], yarg[6], zarg[6];
+			if(COMMAND_GETARG(xarg, 6, argoffset++) &&
+			COMMAND_GETARG(yarg, 6, argoffset++) &&
+			COMMAND_GETARG(zarg, 6, argoffset++)) {
+				SVec dims = {
+					.x = (cs_int16)String_ToInt(xarg),
+					.y = (cs_int16)String_ToInt(yarg),
+					.z = (cs_int16)String_ToInt(zarg)
+				};
+				if(Vec_HaveZero(dims)) {
+					COMMAND_PRINT("Invalid world dimensions");
+				}
 
-		if(_x > 0 && _y > 0 && _z > 0) {
-			COMMAND_ARG2WN(worldname, 0)
+				World *tmp = World_Create(worldname);
+				if(tmp) {
+					World_SetDimensions(tmp, &dims);
+					World_AllocBlockArray(tmp);
+					World_Add(tmp);
+					COMMAND_PRINTF("World \"%s\" created.", worldname);
+				} else {
+					COMMAND_PRINT("Unexpected error");
+				}
+			} else {
+				COMMAND_PRINT("Invalid dimensions, use /world create <name> <x> <y> <z>");
+			}
+		} else if(String_CaselessCompare(subcmd, "load")) {
+			if(world) {
+				COMMAND_PRINT("This world is already loaded");
+			}
+
 			World *tmp = World_Create(worldname);
-			SVec vec;
-			Vec_Set(vec, _x, _y, _z);
-			World_SetDimensions(tmp, &vec);
-			World_AllocBlockArray(tmp);
-			cs_bool success;
-			if(COMMAND_GETARG(genname, 64, 4))
-				success = Generators_Use(tmp, genname, NULL);
-			else
-				success = Generators_Use(tmp, "flat", NULL);
-
-			if(success) {
+			if(World_Load(tmp)) {
+				World_Lock(tmp, 0);
+				World_Unlock(tmp);
 				World_Add(tmp);
-				COMMAND_PRINTF("World \"%s\" created.", worldname);
+				COMMAND_PRINT("World loaded successfully");
 			} else {
 				World_Free(tmp);
-				COMMAND_PRINT("Worlds creation error.");
+				COMMAND_PRINT("Failed to load world");
+			}
+		} else {
+			if(!world) {
+				argoffset = 1;
+				if(ccdata->caller) {
+					world = Client_GetWorld(ccdata->caller);
+					if(!world) {
+						COMMAND_PRINTUSAGE;
+					}
+				}
+			}
+
+			if(String_CaselessCompare(subcmd, "save")) {
+				if(World_Save(world, false)) {
+					COMMAND_PRINT("World saving scheduled");
+				} else {
+					COMMAND_PRINT("This world is busy, try again later");
+				}
+			} else if(String_CaselessCompare(subcmd, "unload")) {
+				if(world == mainw) {
+					COMMAND_PRINT("Cannot unload main world");
+				}
+				for(ClientID i = 0; i < MAX_CLIENTS; i++) {
+					Client *client = Clients_List[i];
+					if(client && Client_IsInWorld(client, world))
+						Client_ChangeWorld(client, mainw);
+				}
+				if(World_Save(world, true)) {
+					if(World_Remove(world)) {
+						COMMAND_PRINT("World unloaded.");
+					} else {
+						COMMAND_PRINT("Unexpected error");
+					}
+				} else {
+					COMMAND_PRINT("This world is busy, try again later");
+				}
+			} else if(String_CaselessCompare(subcmd, "generate")) {
+				cs_char genname[64];
+
+				if(COMMAND_GETARG(genname, 64, argoffset)) {
+					GeneratorRoutine gr = Generators_Get(genname);
+					if(!gr) {
+						COMMAND_PRINT("Unknown generator name");
+					}
+					World_Lock(world, 0);
+					World_CleanBlockArray(world);
+					if(gr(world, NULL) == false) {
+						World_Unlock(world);
+						COMMAND_PRINT("Generator failed");
+					}
+					World_Unlock(world);
+					for(cs_int32 i = 0; i < MAX_CLIENTS; i++) {
+						Client *client = Clients_List[i];
+						if(client && Client_IsInWorld(client, world))
+							Client_ChangeWorld(client, world);
+					}
+					COMMAND_PRINT("World generation done");
+				}
+			} else if(String_CaselessCompare(subcmd, "info")) {
+				COMMAND_PRINT("Work in progress");
 			}
 		}
 	}
@@ -334,45 +407,29 @@ COMMAND_FUNC(GenWorld) {
 	COMMAND_PRINTUSAGE;
 }
 
-COMMAND_FUNC(UnlWorld) {
-	COMMAND_SETUSAGE("/unlworld <worldname>");
+COMMAND_FUNC(GoTo) {
+	COMMAND_SETUSAGE("/goto <worldname>");
 
 	cs_char worldname[64];
-	COMMAND_ARG2WN(worldname, 0)
-	World *tmp = World_GetByName(worldname),
-	*mainw = (World *)AList_GetValue(World_Head).ptr;
-	if(tmp) {
-		if(mainw == tmp) {
-			COMMAND_PRINT("Can't unload main world.");
-		}
-		for(ClientID i = 0; i < MAX_CLIENTS; i++) {
-			Client *client = Clients_List[i];
-			if(client && Client_IsInWorld(client, tmp))
-				Client_ChangeWorld(client, mainw);
-		}
-		if(World_Save(tmp, true)) {
-			COMMAND_PRINT("World unloaded.");
+	if(COMMAND_GETARG(worldname, 60, 0)) {
+		cs_str wndot = String_LastChar(worldname, '.');
+		if(!wndot || !String_CaselessCompare(wndot, ".cws"))
+		String_Append(worldname, 64, ".cws");
+		World *world = World_GetByName(worldname);
+		if(world) {
+			if(Client_IsInWorld(ccdata->caller, world)) {
+				COMMAND_PRINT("You already in this world.");
+			}
+
+			if(Client_ChangeWorld(ccdata->caller, world)) {
+				COMMAND_PRINTF("Teleported to \"%s\"", worldname);
+			}
 		} else {
-			COMMAND_PRINT("Can't start world saving process, try again later.");
+			COMMAND_PRINT("World not found.");
 		}
 	}
-	COMMAND_PRINT("World not found.");
-}
 
-COMMAND_FUNC(SavWorld) {
-	COMMAND_SETUSAGE("/savworld <worldname>");
-
-	cs_char worldname[64];
-	COMMAND_ARG2WN(worldname, 0);
-	World *tmp = World_GetByName(worldname);
-	if(tmp) {
-		if(World_Save(tmp, false)) {
-			COMMAND_PRINT("World saving scheduled.");
-		} else {
-			COMMAND_PRINT("Can't start world saving process, try again later.");
-		}
-	}
-	COMMAND_PRINT("World not found.");
+	COMMAND_PRINTUSAGE;
 }
 
 void Base_Commands(void) {
@@ -388,8 +445,6 @@ void Base_Commands(void) {
 	COMMAND_ADD(Kick, CMDF_OP, "Kicks a player off a server");
 	COMMAND_ADD(SetModel, CMDF_OP | CMDF_CLIENT, "Sets player model");
 	COMMAND_ADD(SetWeather, CMDF_OP | CMDF_CLIENT, "Sets weather in current world");
-	COMMAND_ADD(ChgWorld, CMDF_OP | CMDF_CLIENT, "Teleports you to another world");
-	COMMAND_ADD(GenWorld, CMDF_OP, "Generates new world");
-	COMMAND_ADD(UnlWorld, CMDF_OP, "Unloads specified world");
-	COMMAND_ADD(SavWorld, CMDF_OP, "Forces world save process");
+	COMMAND_ADD(GoTo, CMDF_OP | CMDF_CLIENT, "Teleports you to specified world");
+	COMMAND_ADD(World, CMDF_OP, "World management");
 }
