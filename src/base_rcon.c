@@ -86,11 +86,11 @@ static cs_bool handlerconpacket(RClient *client) {
 			rconcommandhandler(client, client->packet.payload);
 			break;
 		case 0x03:
-			if(String_CaselessCompare(client->packet.payload, Rcon_Password)) {
+			if(String_Compare(client->packet.payload, Rcon_Password)) {
+				client->authed = true;
 				client->packet.size = 10;
 				client->packet.cmd = 0x02;
 				*(cs_uint16 *)client->packet.payload = 0x0000;
-				client->authed = true;
 			} else {
 				client->error = true;
 				client->packet.size = 10;
@@ -164,7 +164,7 @@ void Base_Rcon(void) {
 			return;
 		}
 
-		 Socket_Close(Rcon_Socket);
-		 Log_Error("Failed to start RCON server.");
+		Socket_Close(Rcon_Socket);
+		Log_Error("Failed to start RCON server.");
 	}
 }
