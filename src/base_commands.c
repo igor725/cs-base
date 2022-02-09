@@ -190,7 +190,7 @@ COMMAND_FUNC(Plugins) {
 			PLUGIN_NAME
 			plugin = Plugin_Get(name);
 			if(!plugin) {
-				COMMAND_PRINTF("Plugin \"%s\" not loaded.", name);
+				COMMAND_PRINTF("Plugin \"%s\" is not loaded.", name);
 			}
 			if(Plugin_UnloadDll(plugin, false)) {
 				COMMAND_PRINTF("Plugin \"%s\" successfully unloaded.", name);
@@ -353,7 +353,7 @@ COMMAND_FUNC(World) {
 			}
 
 			if(String_CaselessCompare(subcmd, "save")) {
-				if(World_Save(world, false)) {
+				if(World_Save(world)) {
 					COMMAND_PRINT("World saving scheduled");
 				} else {
 					COMMAND_PRINT("This world is busy, try again later");
@@ -367,7 +367,7 @@ COMMAND_FUNC(World) {
 					if(client && Client_IsInWorld(client, world))
 						Client_ChangeWorld(client, mainw);
 				}
-				if(World_Save(world, true)) {
+				if(World_Save(world)) {
 					if(World_Remove(world)) {
 						COMMAND_PRINT("World unloaded.");
 					} else {

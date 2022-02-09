@@ -39,12 +39,14 @@ static struct _ColorPreset {
 };
 
 static void installColor(World *world, struct _ColorPreset *preset) {
+	World_Lock(world, 0);
 	World_SetEnvColor(world, WORLD_COLOR_DIFFUSE, &preset->diffuse);
 	World_SetEnvColor(world, WORLD_COLOR_AMBIENT, &preset->ambient);
 	World_SetEnvColor(world, WORLD_COLOR_FOG, &preset->fog);
 	World_SetEnvColor(world, WORLD_COLOR_CLOUD, &preset->cloud);
 	World_SetEnvColor(world, WORLD_COLOR_SKY, &preset->sky);
 	World_FinishEnvUpdate(world);
+	World_Unlock(world);
 }
 
 static void UpdateWorldTime(World *world) {
@@ -74,6 +76,10 @@ TIMER_FUNC(DNCycle) {
 			UpdateWorldTime(world);
 		}
 	}
+}
+
+void Base_OnWorldRemoved(void *param) {
+	Assoc_Remove(param, DayNightType);
 }
 
 void Base_DayNight(void) {

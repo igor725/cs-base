@@ -10,6 +10,7 @@ void Base_DayNight(void);
 void Base_OnStop(void *);
 void Base_OnSpawn(void *);
 void Base_OnHandshake(void *);
+void Base_OnWorldRemoved(void *);
 void Base_Commands(void);
 void Base_Heartbeat(void);
 
@@ -19,6 +20,7 @@ Plugin_SetVersion(1)
 
 EventRegBunch events[] = {
 	{'v', EVT_ONHANDSHAKEDONE, (void *)Base_OnHandshake},
+	{'v', EVT_ONWORLDREMOVED, (void *)Base_OnWorldRemoved},
 	{'v', EVT_ONSPAWN, (void *)Base_OnSpawn},
 	{'v', EVT_ONSTOP, (void *)Base_OnStop},
 	{0, 0, NULL}
