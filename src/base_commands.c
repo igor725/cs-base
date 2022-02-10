@@ -220,12 +220,6 @@ COMMAND_FUNC(Plugins) {
 	COMMAND_PRINTUSAGE;
 }
 
-COMMAND_FUNC(Stop) {
-	(void)ccdata;
-	Server_Active = false;
-	return false;
-}
-
 COMMAND_FUNC(Kick) {
 	COMMAND_SETUSAGE("/kick <player> [reason]");
 
@@ -441,7 +435,6 @@ void Base_Commands(void) {
 	COMMAND_ADD(Uptime, CMDF_NONE, "Prints server uptime");
 	COMMAND_ADD(CFG, CMDF_OP, "Server config manager");
 	COMMAND_ADD(Plugins, CMDF_OP, "Server plugin manager");
-	COMMAND_ADD(Stop, CMDF_OP, "Stops a server");
 	COMMAND_ADD(Kick, CMDF_OP, "Kicks a player off a server");
 	COMMAND_ADD(SetModel, CMDF_OP | CMDF_CLIENT, "Sets player model");
 	COMMAND_ADD(SetWeather, CMDF_OP | CMDF_CLIENT, "Sets weather in current world");
