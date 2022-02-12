@@ -85,5 +85,5 @@ void Base_OnWorldRemoved(void *param) {
 void Base_DayNight(void) {
 	CEntry *ent = Config_GetEntry(Base_ConfigStore, "time-cycle");
 	DayNightType = Assoc_NewType(ASSOC_BIND_WORLD);
-	if(DayNightType >= 0) Timer_Add(-1, 1000, DNCycle, ent);	
+	if(DayNightType >= 0) Timer_Add(-1, 1000, DNCycle, ent);
 }
