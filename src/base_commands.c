@@ -122,6 +122,8 @@ COMMAND_FUNC(CFG) {
 				case CONFIG_TYPE_STR:
 					Config_SetStr(ent, value);
 					break;
+				
+				case CONFIG_MAX_TYPE:
 				default:
 					COMMAND_PRINT("Can't detect entry type.");
 			}
