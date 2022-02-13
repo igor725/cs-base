@@ -387,7 +387,7 @@ COMMAND_FUNC(World) {
 						COMMAND_PRINT("Generator failed");
 					}
 					World_Unlock(world);
-					for(cs_int32 i = 0; i < MAX_CLIENTS; i++) {
+					for(ClientID i = 0; i < MAX_CLIENTS; i++) {
 						Client *client = Clients_List[i];
 						if(client && Client_IsInWorld(client, world))
 							Client_ChangeWorld(client, world);
