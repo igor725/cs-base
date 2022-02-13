@@ -2,6 +2,7 @@
 #include <config.h>
 #include <event.h>
 #include <str.h>
+#include <plugin.h>
 
 void Base_Rcon(void);
 void Base_Chat(void);
