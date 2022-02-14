@@ -36,6 +36,10 @@ void Base_Config(void) {
 	Config_SetComment(ent, "Enable day/night cycle.");
 	Config_SetDefaultBool(ent, false);
 
+	ent = Config_NewEntry(Base_ConfigStore, "tnt-deny", CONFIG_TYPE_BOOL);
+	Config_SetComment(ent, "If enabled, only operators can blow TNT.");
+	Config_SetDefaultBool(ent, true);
+
 	ent = Config_NewEntry(Base_ConfigStore, "rcon-enabled", CONFIG_TYPE_BOOL);
 	Config_SetComment(ent, "Enable or disable rcon protocol.");
 	Config_SetDefaultBool(ent, false);
