@@ -122,7 +122,7 @@ COMMAND_FUNC(CFG) {
 				case CONFIG_TYPE_STR:
 					Config_SetStr(ent, value);
 					break;
-				
+
 				case CONFIG_MAX_TYPE:
 				default:
 					COMMAND_PRINT("Can't detect entry type.");
@@ -151,7 +151,10 @@ COMMAND_FUNC(CFG) {
 					COMMAND_APPENDF(key, CFG_MAX_LEN, "\r\n%s = %s (%s)",
 					Config_GetEntryKey(ent), value, Config_GetEntryTypeName(ent));
 				} else {
-					COMMAND_APPENDF(key, CFG_MAX_LEN, "\r\n%s - Config_ToStr() == 0??");
+					COMMAND_APPENDF(key, CFG_MAX_LEN,
+						"\r\n%s - Config_ToStr() == 0??",
+						Config_GetEntryKey(ent)
+					);
 				}
 				ent = ent->next;
 			}
@@ -233,7 +236,7 @@ COMMAND_FUNC(Kick) {
 			Client_Kick(tg, reason);
 			COMMAND_PRINTF("Player %s kicked.", playername);
 		} else {
-			COMMAND_PRINTF("Player not found.");
+			COMMAND_PRINT("Player not found.");
 		}
 	}
 
