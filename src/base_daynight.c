@@ -50,7 +50,7 @@ static void installColor(World *world, struct _ColorPreset *preset) {
 	World_Unlock(world);
 }
 
-static void UpdateWorldTime(World *world) {
+INL static void UpdateWorldTime(World *world) {
 	cs_int32 *timer = Assoc_GetPtr(world, DayNightType);
 	if(!timer) timer = Assoc_AllocFor(world, DayNightType, 1, sizeof(cs_int32));
 
