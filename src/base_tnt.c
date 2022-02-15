@@ -2,6 +2,8 @@
 #include <event.h>
 #include <config.h>
 #include <block.h>
+#include <client.h>
+#include <world.h>
 
 extern CStore *Base_ConfigStore;
 CEntry *tntent = NULL;

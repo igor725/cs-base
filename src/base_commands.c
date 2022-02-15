@@ -1,9 +1,11 @@
 #include <core.h>
+#include <client.h>
 #include <config.h>
 #include <command.h>
 #include <server.h>
 #include <plugin.h>
 #include <generators.h>
+#include <world.h>
 
 extern cs_char Base_OSName[64];
 cs_bool Base_AddOP(cs_str name);
