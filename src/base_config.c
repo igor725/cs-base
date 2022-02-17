@@ -6,6 +6,7 @@
 #include <client.h>
 #include <platform.h>
 #include <strstor.h>
+#include <types/event.h>
 #include "base_lists.h"
 
 #define BASECFG "base.cfg"
@@ -113,9 +114,9 @@ void Base_OnSpawn(Client *client) {
 		Client_SetOP(client, Base_CheckList(&operators, Client_GetName(client)));
 }
 
-void Base_OnHandshake(Client *client) {
-	if(Base_CheckList(&bans, Client_GetName(client)))
-		Client_Kick(client, "You are banned!");
+void Base_OnHandshake(onHandshakeDone *a) {
+	if(Base_CheckList(&bans, Client_GetName(a->client)))
+		Client_Kick(a->client, "You are banned!");
 }
 
 void Base_OnStop(void) {
