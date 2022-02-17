@@ -109,9 +109,10 @@ cs_bool Base_RemoveBan(cs_str name) {
 	return Base_RemoveList(&bans, name);
 }
 
-void Base_OnSpawn(Client *client) {
-	if(Client_IsFirstSpawn(client) && !Client_IsOP(client))
-		Client_SetOP(client, Base_CheckList(&operators, Client_GetName(client)));
+void Base_OnSpawn(void *param) {
+	onSpawn *a = (onSpawn *)param;
+	if(Client_IsFirstSpawn(a->client) && !Client_IsOP(a->client))
+		Client_SetOP(a->client, Base_CheckList(&operators, Client_GetName(a->client)));
 }
 
 void Base_OnHandshake(onHandshakeDone *a) {

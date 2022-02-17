@@ -10,7 +10,7 @@ extern CStore *Base_ConfigStore;
 
 static void onspawnfunc(void *param) {
 	if(!Config_GetBoolByKey(Base_ConfigStore, "connect-notifications")) return;
-	Client *client = (Client *)param;
+	Client *client = ((onSpawn *)param)->client;
 	char message[154];
 
 	if(Client_IsFirstSpawn(client)) {
