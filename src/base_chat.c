@@ -11,14 +11,14 @@ extern CStore *Base_ConfigStore;
 static void onspawnfunc(void *param) {
 	if(!Config_GetBoolByKey(Base_ConfigStore, "connect-notifications")) return;
 	Client *client = ((onSpawn *)param)->client;
-	char message[154];
+	char message[128];
 
 	if(Client_IsFirstSpawn(client)) {
 		cs_str name = Client_GetName(client);
 		cs_str appname = Client_GetAppName(client);
-		if(String_FormatBuf(message, 154, "&ePlayer %s connected with %s.", name, appname)) {
+		if(String_FormatBuf(message, 128, "&e%s has joined (%s)", name, appname)) {
 			Client_Chat(Broadcast, MESSAGE_TYPE_CHAT, message);
-			Log_Info(message + 2);
+			Log_Info(message);
 		}
 	}
 }
@@ -28,10 +28,10 @@ static void ondisconnectfunc(void *param) {
 	if(!Config_GetBoolByKey(Base_ConfigStore, "connect-notifications")) return;
 	Client *client = (Client *)param;
 	if(Client_IsFirstSpawn(client)) return;
-	cs_char message[88];
-	if(String_FormatBuf(message, 88, "&ePlayer %s disconnected.", Client_GetName(client))) {
+	cs_char message[128];
+	if(String_FormatBuf(message, 128, "&e%s left (%s)", Client_GetName(client), Client_GetDisconnectReason(client))) {
 		Client_Chat(Broadcast, MESSAGE_TYPE_CHAT, message);
-		Log_Info(message + 2);
+		Log_Info(message);
 	}
 }
 
