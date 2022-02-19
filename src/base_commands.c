@@ -270,7 +270,7 @@ COMMAND_FUNC(SetWeather) {
 
 	cs_char weathername[64];
 	if(COMMAND_GETARG(weathername, 64, 0)) {
-		EWorldWeather weather = WORLD_WEATHER_SUN;
+		EWeather weather = WORLD_WEATHER_SUN;
 		if(String_CaselessCompare(weathername, "snow"))
 			weather = WORLD_WEATHER_SNOW;
 		else if(String_CaselessCompare(weathername, "rain"))
