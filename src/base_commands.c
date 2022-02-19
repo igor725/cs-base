@@ -447,7 +447,7 @@ COMMAND_FUNC(Msg) {
 		cs_str msg = String_FromArgument(ccdata->args, 1);
 		if(String_Length(msg) > 0) {
 			cs_str pname = ccdata->caller ? Client_GetName(ccdata->caller) : "Console";
-			if(String_FormatBuf(ccdata->out, MAX_CMD_OUT, "PM from <&e%s&f>: %s", pname, msg)) {
+			if(String_FormatBuf(ccdata->out, MAX_CMD_OUT, "&7<%s>: %s", pname, msg) > 0) {
 				Client_Chat(target, MESSAGE_TYPE_CHAT, ccdata->out);
 				COMMAND_PRINT("&aMessage sent.");
 			} else {
