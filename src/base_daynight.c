@@ -51,6 +51,7 @@ static void installColor(World *world, struct _ColorPreset *preset) {
 }
 
 INL static void UpdateWorldTime(World *world) {
+	if(!World_IsReadyToPlay(world)) return;
 	cs_int32 *timer = Assoc_GetPtr(world, DayNightType);
 	if(!timer) timer = Assoc_AllocFor(world, DayNightType, 1, sizeof(cs_int32));
 
@@ -79,7 +80,7 @@ TIMER_FUNC(DNCycle) {
 	}
 }
 
-void Base_OnWorldRemoved(void *param) {
+void Base_OnWorldUnloaded(void *param) {
 	Assoc_Remove(param, DayNightType);
 }
 
