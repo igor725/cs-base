@@ -433,6 +433,32 @@ COMMAND_FUNC(GoTo) {
 	COMMAND_PRINTUSAGE;
 }
 
+COMMAND_FUNC(Msg) {
+	COMMAND_SETUSAGE("/msg <player> ...");
+
+	cs_char username[64];
+	if(COMMAND_GETARG(username, 64, 0)) {
+		Client *target = Client_GetByName(username);
+		if(!target) {
+			COMMAND_PRINT("Player not found.");
+		} else if(target == ccdata->caller) {
+			COMMAND_PRINTUSAGE;
+		}
+		cs_str msg = String_FromArgument(ccdata->args, 1);
+		if(String_Length(msg) > 0) {
+			cs_str pname = Client_GetName(ccdata->caller);
+			if(String_FormatBuf(ccdata->out, MAX_CMD_OUT, "PM from <&e%s&f>: %s", pname, msg)) {
+				Client_Chat(target, MESSAGE_TYPE_CHAT, ccdata->out);
+				COMMAND_PRINT("&aMessage sent.");
+			} else {
+				COMMAND_PRINT("&cYour message is too long.");
+			}
+		}
+	}
+
+	COMMAND_PRINTUSAGE;
+}
+
 void Base_Commands(void) {
 	COMMAND_ADD(Info, CMDF_NONE, "Prints server software info");
 	COMMAND_ADD(MakeOp, CMDF_OP, "Grant operator status to a player");
@@ -447,4 +473,5 @@ void Base_Commands(void) {
 	COMMAND_ADD(SetWeather, CMDF_OP | CMDF_CLIENT, "Sets weather in current world");
 	COMMAND_ADD(GoTo, CMDF_OP | CMDF_CLIENT, "Teleports you to specified world");
 	COMMAND_ADD(World, CMDF_OP, "World management");
+	COMMAND_ADD(Msg, CMDF_NONE, "Sends private message to specified player");
 }
