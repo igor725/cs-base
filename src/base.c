@@ -10,7 +10,6 @@ void Base_Chat(void);
 void Base_Config(void);
 void Base_DayNight(void);
 void Base_OnStop(void *);
-void Base_OnSpawn(void *);
 void Base_OnBlockPlace(void *);
 void Base_OnHandshake(void *);
 void Base_OnWorldUnloaded(void *);
@@ -25,7 +24,6 @@ EventRegBunch events[] = {
 	{'v', EVT_ONHANDSHAKEDONE, (void *)Base_OnHandshake},
 	{'v', EVT_ONWORLDUNLOADED, (void *)Base_OnWorldUnloaded},
 	{'v', EVT_ONBLOCKPLACE, (void *)Base_OnBlockPlace},
-	{'v', EVT_ONSPAWN, (void *)Base_OnSpawn},
 	{'v', EVT_ONSTOP, (void *)Base_OnStop},
 	{0, 0, NULL}
 };
