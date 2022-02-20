@@ -472,6 +472,6 @@ void Base_Commands(void) {
 	COMMAND_ADD(SetModel, CMDF_OP | CMDF_CLIENT, "Sets player model");
 	COMMAND_ADD(SetWeather, CMDF_OP | CMDF_CLIENT, "Sets weather in current world");
 	COMMAND_ADD(GoTo, CMDF_OP | CMDF_CLIENT, "Teleports you to specified world");
-	COMMAND_ADD(World, CMDF_OP, "World management");
+	COMMAND_ADD(World, CMDF_OP, "Worlds management");
 	COMMAND_ADD(Msg, CMDF_NONE, "Sends private message to specified player");
 }

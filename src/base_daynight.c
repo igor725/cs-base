@@ -1,5 +1,4 @@
 #include <core.h>
-#include <log.h>
 #include <config.h>
 #include <world.h>
 #include <timer.h>
