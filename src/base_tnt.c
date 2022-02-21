@@ -29,8 +29,11 @@ void Base_OnBlockPlace(void *param) {
 			for(pos.y = a->pos.y - 10; pos.y < a->pos.y + 10; pos.y++) {
 				for(pos.z = a->pos.z - 10; pos.z < a->pos.z + 10; pos.z++) {
 					cs_uint32 offset = World_GetOffset(world, &pos);
-					Block_BulkUpdateAdd(&upd, offset, BLOCK_AIR);
-					World_SetBlockO(world, offset, BLOCK_AIR);
+					BlockID id = World_GetBlockO(world, offset);
+					if(id != BLOCK_BEDROCK && (id < BLOCK_WATER || id > BLOCK_LAVA_STILL)) {
+						Block_BulkUpdateAdd(&upd, offset, BLOCK_AIR);
+						World_SetBlockO(world, offset, BLOCK_AIR);
+					}
 				}
 			}
 		}
