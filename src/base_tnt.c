@@ -23,12 +23,6 @@ void Base_OnBlockPlace(void *param) {
 		};
 
 		World_Lock(world, 0);
-		
-		for(ClientID i = 0; i < MAX_CLIENTS; i++) {
-			Client *client = Clients_List[i];
-			if(client && Client_IsInWorld(client, world))
-				Client_SetNoFlush(client, true);
-		}
 
 		SVec pos;
 		for(pos.x = a->pos.x - 10; pos.x < a->pos.x + 10; pos.x++) {
@@ -39,12 +33,6 @@ void Base_OnBlockPlace(void *param) {
 					World_SetBlockO(world, offset, BLOCK_AIR);
 				}
 			}
-		}
-
-		for(ClientID i = 0; i < MAX_CLIENTS; i++) {
-			Client *client = Clients_List[i];
-			if(client && Client_IsInWorld(client, world))
-				Client_SetNoFlush(client, false);
 		}
 
 		Block_BulkUpdateSend(&upd);
