@@ -288,15 +288,12 @@ COMMAND_FUNC(World) {
 
 	cs_char subcmd[64], worldname[64];
 	if(COMMAND_GETARG(subcmd, 64, 0)) {
-		if(COMMAND_GETARG(worldname, 60, 1)) {
-			cs_str wndot = String_LastChar(worldname, '.');
-			if(!wndot || !String_CaselessCompare(wndot, ".cws"))
-			String_Append(worldname, 64, ".cws");
-		}
-
-		World *world = World_GetByName(worldname),
+		World *world = NULL,
 		*mainw = World_Main;
 		cs_int32 argoffset = 2;
+
+		if(COMMAND_GETARG(worldname, 64, 1))
+			world = World_GetByName(worldname);
 
 		if(String_CaselessCompare(subcmd, "create")) {
 			if(world) {
@@ -413,9 +410,6 @@ COMMAND_FUNC(GoTo) {
 
 	cs_char worldname[64];
 	if(COMMAND_GETARG(worldname, 60, 0)) {
-		cs_str wndot = String_LastChar(worldname, '.');
-		if(!wndot || !String_CaselessCompare(wndot, ".cws"))
-		String_Append(worldname, 64, ".cws");
 		World *world = World_GetByName(worldname);
 		if(world) {
 			if(Client_IsInWorld(ccdata->caller, world)) {
