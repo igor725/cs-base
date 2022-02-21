@@ -18,7 +18,7 @@ void Base_Heartbeat(void);
 
 CStore *Base_ConfigStore;
 cs_char Base_OSName[64];
-Plugin_SetVersion(1)
+Plugin_SetVersion(1);
 
 EventRegBunch events[] = {
 	{'v', EVT_ONHANDSHAKEDONE, (void *)Base_OnHandshake},
