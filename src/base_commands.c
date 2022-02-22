@@ -1,4 +1,6 @@
 #include <core.h>
+#include <log.h>
+#include <list.h>
 #include <client.h>
 #include <config.h>
 #include <command.h>
@@ -397,7 +399,18 @@ COMMAND_FUNC(World) {
 					COMMAND_PRINT("World generation done");
 				}
 			} else if(String_CaselessCompare(subcmd, "info")) {
-				COMMAND_PRINT("Work in progress");
+				COMMAND_PRINTLINE("&aList of loaded worlds:");
+				AListField *tmp;
+				SVec dims;
+				List_Iter(tmp, World_Head) {
+					World *world = AList_GetValue(tmp).ptr;
+					cs_str wname = World_GetName(world);
+					World_GetDimensions(world, &dims);
+					COMMAND_PRINTFLINE("  &3%s&f: &d%dx%dx%d&f with &9%d&f players",
+						wname, dims.x, dims.y, dims.z, World_CountPlayers(world)
+					);
+				}
+				return false;
 			}
 		}
 	}
