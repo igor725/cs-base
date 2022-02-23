@@ -15,6 +15,7 @@ void Base_OnHandshake(void *);
 void Base_OnWorldUnloaded(void *);
 void Base_Commands(void);
 void Base_Heartbeat(void);
+void Base_AutoSave(void);
 
 CStore *Base_ConfigStore;
 cs_char Base_OSName[64];
@@ -46,6 +47,7 @@ cs_bool Plugin_Load(void) {
 	Base_DayNight();
 	Base_Commands();
 	Base_Heartbeat();
+	Base_AutoSave();
 	Base_TNT();
 
 	return Event_RegisterBunch(events);

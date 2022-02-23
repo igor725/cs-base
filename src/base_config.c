@@ -34,40 +34,44 @@ void Base_Config(void) {
 	CEntry *ent;
 
 	ent = Config_NewEntry(Base_ConfigStore, "time-cycle", CONFIG_TYPE_BOOL);
-	Config_SetComment(ent, "Enable day/night cycle.");
+	Config_SetComment(ent, "Enable day/night cycle");
 	Config_SetDefaultBool(ent, false);
 
+	ent = Config_NewEntry(Base_ConfigStore, "autosave-delay", CONFIG_TYPE_STR);
+	Config_SetComment(ent, "Worlds autosave delay (Accepts values like 15m, 16h, 1d, anything else means autosaving is disabled)");
+	Config_SetDefaultStr(ent, "15m");
+
 	ent = Config_NewEntry(Base_ConfigStore, "tnt-deny", CONFIG_TYPE_BOOL);
-	Config_SetComment(ent, "If enabled, only operators can blow TNT.");
+	Config_SetComment(ent, "If enabled, only operators can blow TNT");
 	Config_SetDefaultBool(ent, true);
 
 	ent = Config_NewEntry(Base_ConfigStore, "rcon-enabled", CONFIG_TYPE_BOOL);
-	Config_SetComment(ent, "Enable or disable rcon protocol.");
+	Config_SetComment(ent, "Enable or disable rcon protocol");
 	Config_SetDefaultBool(ent, false);
 
 	ent = Config_NewEntry(Base_ConfigStore, "rcon-port", CONFIG_TYPE_INT16);
-	Config_SetComment(ent, "Use specified port to accept rcon clients. [1-65535]");
+	Config_SetComment(ent, "Use specified port to accept rcon clients [1-65535]");
 	Config_SetDefaultInt16(ent, 25575);
 
 	ent = Config_NewEntry(Base_ConfigStore, "rcon-password", CONFIG_TYPE_STR);
-	Config_SetComment(ent, "Rcon authorization password.");
+	Config_SetComment(ent, "Rcon authorization password");
 	Config_SetDefaultStr(ent, "");
 
 	ent = Config_NewEntry(Base_ConfigStore, "connect-notifications", CONFIG_TYPE_BOOL);
-	Config_SetComment(ent, "Enable or disable player (dis-)connection notifications.");
+	Config_SetComment(ent, "Enable or disable player (dis-)connection notifications");
 	Config_SetDefaultBool(ent, true);
 
 	ent = Config_NewEntry(Base_ConfigStore, "heartbeat-cc-enabled", CONFIG_TYPE_BOOL);
-	Config_SetComment(ent, "Enable ClassiCube heartbeat.");
+	Config_SetComment(ent, "Enable ClassiCube heartbeat");
 	Config_SetDefaultBool(ent, false);
 
 	ent = Config_NewEntry(Base_ConfigStore, "heartbeat-delay", CONFIG_TYPE_INT8);
-	Config_SetComment(ent, "Heartbeat request delay. [1-60]");
+	Config_SetComment(ent, "Heartbeat request delay [1-60]");
 	Config_SetLimit(ent, 1, 60);
 	Config_SetDefaultInt8(ent, 10);
 
 	ent = Config_NewEntry(Base_ConfigStore, "heartbeat-public", CONFIG_TYPE_BOOL);
-	Config_SetComment(ent, "Show server in the ClassiCube server list.");
+	Config_SetComment(ent, "Show server in the ClassiCube server list");
 	Config_SetDefaultBool(ent, false);
 
 	Base_ConfigStore->modified = true;

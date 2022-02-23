@@ -403,7 +403,7 @@ COMMAND_FUNC(World) {
 				AListField *tmp;
 				SVec dims;
 				List_Iter(tmp, World_Head) {
-					World *world = AList_GetValue(tmp).ptr;
+					world = AList_GetValue(tmp).ptr;
 					cs_str wname = World_GetName(world);
 					World_GetDimensions(world, &dims);
 					COMMAND_PRINTFLINE("  &3%s&f: &d%dx%dx%d&f with &9%d&f players",
