@@ -88,86 +88,9 @@ COMMAND_FUNC(Uptime) {
 	s = (diff / 1000) % 60,
 	ms = diff % 1000;
 	COMMAND_PRINTF(
-		"Server uptime: %03d:%02d:%02d:%02d.%03d",
+		"Server uptime: &b%02d:%02d:%02d:%02d.%03d",
 		d, h, m, s, ms
 	);
-}
-
-COMMAND_FUNC(CFG) {
-	COMMAND_SETUSAGE("/cfg <set/get/print> [key] [value]");
-	cs_char subcommand[8], key[CFG_MAX_LEN], value[CFG_MAX_LEN];
-
-	if(COMMAND_GETARG(subcommand, 8, 0)) {
-		if(String_CaselessCompare(subcommand, "set")) {
-			if(!COMMAND_GETARG(key, CFG_MAX_LEN, 1)) {
-				COMMAND_PRINTUSAGE;
-			}
-			CEntry *ent = Config_GetEntry(Server_Config, key);
-			if(!ent) {
-				COMMAND_PRINT("This entry not found in \"server.cfg\" store.");
-			}
-			if(!COMMAND_GETARG(value, CFG_MAX_LEN, 2)) {
-				COMMAND_PRINTUSAGE;
-			}
-
-			switch (Config_GetEntryType(ent)) {
-				case CONFIG_TYPE_INT32:
-					Config_SetInt32(ent, String_ToInt(value));
-					break;
-				case CONFIG_TYPE_INT16:
-					Config_SetInt16(ent, (cs_int16)String_ToInt(value));
-					break;
-				case CONFIG_TYPE_INT8:
-					Config_SetInt8(ent, (cs_int8)String_ToInt(value));
-					break;
-				case CONFIG_TYPE_BOOL:
-					Config_SetBool(ent, String_CaselessCompare(value, "True"));
-					break;
-				case CONFIG_TYPE_STR:
-					Config_SetStr(ent, value);
-					break;
-
-				case CONFIG_MAX_TYPE:
-				default:
-					COMMAND_PRINT("Can't detect entry type.");
-			}
-			COMMAND_PRINT("Entry value changed successfully.");
-		} else if(String_CaselessCompare(subcommand, "get")) {
-			if(!COMMAND_GETARG(key, CFG_MAX_LEN, 1)) {
-				COMMAND_PRINTUSAGE;
-			}
-
-			CEntry *ent = Config_GetEntry(Server_Config, key);
-			if(ent) {
-				if(Config_ToStr(ent, value, CFG_MAX_LEN)) {
-					COMMAND_PRINTF("%s = %s (%s)", key, value, Config_GetEntryTypeName(ent));
-				} else {
-					COMMAND_PRINT("Config_ToStr() == 0??");
-				}
-			}
-			COMMAND_PRINT("This entry not found in \"server.cfg\" store.");
-		} else if(String_CaselessCompare(subcommand, "print")) {
-			CEntry *ent = Server_Config->firstCfgEntry;
-			COMMAND_APPEND("Server config entries:")
-
-			while(ent) {
-				if(Config_ToStr(ent, value, CFG_MAX_LEN)) {
-					COMMAND_APPENDF(key, CFG_MAX_LEN, "\r\n%s = %s (%s)",
-					Config_GetEntryKey(ent), value, Config_GetEntryTypeName(ent));
-				} else {
-					COMMAND_APPENDF(key, CFG_MAX_LEN,
-						"\r\n%s - Config_ToStr() == 0??",
-						Config_GetEntryKey(ent)
-					);
-				}
-				ent = ent->next;
-			}
-
-			return true;
-		}
-	}
-
-	COMMAND_PRINTUSAGE;
 }
 
 #define PLUGIN_NAME \
@@ -179,8 +102,8 @@ if(!lc || !String_CaselessCompare(lc, "." DLIB_EXT)) { \
 	String_Append(name, 64, "." DLIB_EXT); \
 }
 
-COMMAND_FUNC(Plugins) {
-	COMMAND_SETUSAGE("/plugins <load/unload/list> [pluginName]");
+COMMAND_FUNC(Plugin) {
+	COMMAND_SETUSAGE("/plugin <load/unload/list> [pluginName]");
 	cs_char subcommand[8], name[64];
 	Plugin *plugin;
 
@@ -473,8 +396,7 @@ void Base_Commands(void) {
 	COMMAND_ADD(Ban, CMDF_OP, "Adds player to banlist");
 	COMMAND_ADD(UnBan, CMDF_OP, "Removes player from banlist");
 	COMMAND_ADD(Uptime, CMDF_NONE, "Prints server uptime");
-	COMMAND_ADD(CFG, CMDF_OP, "Server config manager");
-	COMMAND_ADD(Plugins, CMDF_OP, "Server plugin manager");
+	COMMAND_ADD(Plugin, CMDF_OP, "Server plugin manager");
 	COMMAND_ADD(Kick, CMDF_OP, "Kicks a player off a server");
 	COMMAND_ADD(SetModel, CMDF_OP | CMDF_CLIENT, "Sets player model");
 	COMMAND_ADD(SetWeather, CMDF_OP | CMDF_CLIENT, "Sets weather in current world");
