@@ -74,7 +74,6 @@ void Base_Config(void) {
 	Config_SetComment(ent, "Show server in the ClassiCube server list");
 	Config_SetDefaultBool(ent, false);
 
-	Base_ConfigStore->modified = true;
 	if(!Config_Load(Base_ConfigStore)) {
 		cs_int32 line = 0;
 		ECExtra extra = CONFIG_EXTRA_NOINFO;
@@ -94,7 +93,7 @@ void Base_Config(void) {
 		Config_ResetToDefault(Base_ConfigStore);
 	}
 
-	Config_Save(Base_ConfigStore);
+	Config_Save(Base_ConfigStore, true);
 }
 
 cs_bool Base_AddOP(cs_str name) {
