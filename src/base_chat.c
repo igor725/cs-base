@@ -27,7 +27,7 @@ static void ondisconnectfunc(void *param) {
 	if(!Server_Active) return;
 	if(!Config_GetBoolByKey(Base_ConfigStore, "connect-notifications")) return;
 	Client *client = (Client *)param;
-	if(Client_IsFirstSpawn(client)) return;
+	if(!Client_CheckState(client, PLAYER_STATE_INGAME)) return;
 	cs_char message[128];
 	if(String_FormatBuf(message, 128, "&e%s left (%s)", Client_GetName(client), Client_GetDisconnectReason(client))) {
 		Client_Chat(Broadcast, MESSAGE_TYPE_CHAT, message);
