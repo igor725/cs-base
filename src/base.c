@@ -66,8 +66,10 @@ cs_bool Plugin_Load(void) {
 cs_bool Plugin_Unload(cs_bool force) {
 	if(force) {
 		Event_UnregisterBunch(events);
-		Config_DestroyStore(Base_ConfigStore);
+		if(Base_ConfigStore)
+			Config_DestroyStore(Base_ConfigStore);
 		return true;
 	}
+
 	return false;
 }
