@@ -1,6 +1,7 @@
 #ifndef BASE_LISTS_H
 #define BASE_LISTS_H
-#include <list.h>
+#include <core.h>
+#include <types/list.h>
 
 typedef struct {
 	cs_bool alerted;

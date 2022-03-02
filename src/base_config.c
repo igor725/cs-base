@@ -12,22 +12,12 @@
 #define BASECFG "base.cfg"
 
 extern CStore *Base_ConfigStore;
-BList operators = {
-	.alerted = false,
-	.filename = "ops.txt",
-	.head = NULL
-};
-
-BList bans = {
-	.alerted = false,
-	.filename = "bans.txt",
-	.head = NULL
-};
+extern BList Base_Operators, Base_Bans;
 
 void Base_Config(void) {
-	if(!Base_LoadList(&operators))
+	if(!Base_LoadList(&Base_Operators))
 		Log_Error("Failed to load ops.txt.");
-	if(!Base_LoadList(&bans))
+	if(!Base_LoadList(&Base_Bans))
 		Log_Error("Failed to load bans.txt.");
 
 	Base_ConfigStore = Config_NewStore(BASECFG);
@@ -97,31 +87,31 @@ void Base_Config(void) {
 }
 
 cs_bool Base_AddOP(cs_str name) {
-	return Base_AddList(&operators, name);
+	return Base_AddList(&Base_Operators, name);
 }
 
 cs_bool Base_RemoveOP(cs_str name) {
-	return Base_RemoveList(&operators, name);
+	return Base_RemoveList(&Base_Operators, name);
 }
 
 cs_bool Base_AddBan(cs_str name) {
-	return Base_AddList(&bans, name);
+	return Base_AddList(&Base_Bans, name);
 }
 
 cs_bool Base_RemoveBan(cs_str name) {
-	return Base_RemoveList(&bans, name);
+	return Base_RemoveList(&Base_Bans, name);
 }
 
 void Base_OnHandshake(onHandshakeDone *a) {
-	if(Base_CheckList(&bans, Client_GetName(a->client)))
+	if(Base_CheckList(&Base_Bans, Client_GetName(a->client)))
 		Client_Kick(a->client, "You are banned!");
-	else if(Base_CheckList(&operators, Client_GetName(a->client)))
+	else if(Base_CheckList(&Base_Operators, Client_GetName(a->client)))
 		Client_SetOP(a->client, true);
 }
 
 void Base_OnStop(void) {
-	if(!Base_SaveList(&operators))
+	if(!Base_SaveList(&Base_Operators))
 		Log_Error("Failed to save ops.txt.");
-	if(!Base_SaveList(&bans))
+	if(!Base_SaveList(&Base_Bans))
 		Log_Error("Failed to save bans.txt.");
 }

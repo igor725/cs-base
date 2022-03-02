@@ -1,5 +1,6 @@
 #include <core.h>
 #include <str.h>
+#include <list.h>
 #include <platform.h>
 #include "base_lists.h"
 
