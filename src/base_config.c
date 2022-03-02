@@ -86,12 +86,20 @@ void Base_Config(void) {
 	Config_Save(Base_ConfigStore, true);
 }
 
+cs_bool Base_IsOP(cs_str name) {
+	return Base_CheckList(&Base_Operators, name);
+}
+
 cs_bool Base_AddOP(cs_str name) {
 	return Base_AddList(&Base_Operators, name);
 }
 
 cs_bool Base_RemoveOP(cs_str name) {
 	return Base_RemoveList(&Base_Operators, name);
+}
+
+cs_bool Base_IsBanned(cs_str name) {
+	return Base_CheckList(&Base_Bans, name);
 }
 
 cs_bool Base_AddBan(cs_str name) {
@@ -102,11 +110,14 @@ cs_bool Base_RemoveBan(cs_str name) {
 	return Base_RemoveList(&Base_Bans, name);
 }
 
-void Base_OnHandshake(onHandshakeDone *a) {
-	if(Base_CheckList(&Base_Bans, Client_GetName(a->client)))
+cs_bool Base_OnHandshake(onHandshakeDone *a) {
+	if(Base_IsBanned(Client_GetName(a->client))) {
 		Client_Kick(a->client, "You are banned!");
-	else if(Base_CheckList(&Base_Operators, Client_GetName(a->client)))
+		return false;
+	} else if(Base_IsOP(Client_GetName(a->client)))
 		Client_SetOP(a->client, true);
+
+	return true;
 }
 
 void Base_OnStop(void) {

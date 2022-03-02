@@ -31,7 +31,7 @@ Plugin_DeclareInterfaces {
 };
 
 Event_DeclareBunch (events) {
-	EVENT_BUNCH_ADD('v', EVT_ONHANDSHAKEDONE, Base_OnHandshake)
+	EVENT_BUNCH_ADD('b', EVT_ONHANDSHAKEDONE, Base_OnHandshake)
 	EVENT_BUNCH_ADD('v', EVT_ONWORLDUNLOADED, Base_OnWorldUnloaded)
 	EVENT_BUNCH_ADD('v', EVT_ONBLOCKPLACE, Base_OnBlockPlace)
 	EVENT_BUNCH_ADD('v', EVT_ONSTOP, Base_OnStop)
