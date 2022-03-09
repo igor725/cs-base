@@ -25,9 +25,10 @@ static void onspawnfunc(void *param) {
 
 static void ondisconnectfunc(void *param) {
 	if(!Server_Active) return;
-	if(!Config_GetBoolByKey(Base_ConfigStore, "connect-notifications")) return;
 	Client *client = (Client *)param;
+	if(Client_IsBot(client)) return;
 	if(Client_GetState(client) < CLIENT_STATE_INGAME) return;
+	if(!Config_GetBoolByKey(Base_ConfigStore, "connect-notifications")) return;
 	cs_char message[128];
 	if(String_FormatBuf(message, 128, "&e%s left (%s)", Client_GetName(client), Client_GetDisconnectReason(client))) {
 		Client_Chat(Broadcast, MESSAGE_TYPE_CHAT, message);
