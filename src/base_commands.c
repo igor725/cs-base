@@ -301,16 +301,21 @@ COMMAND_FUNC(World) {
 					COMMAND_PRINT("This world is busy, try again later");
 				}
 			} else if(String_CaselessCompare(subcmd, "generate")) {
-				cs_char genname[64];
+				cs_char genname[64], genseed[12];
+				cs_int32 numseed = GENERATOR_SEED_FROM_TIME;
 
-				if(COMMAND_GETARG(genname, 64, argoffset)) {
+				if(COMMAND_GETARG(genname, 64, argoffset++)) {
 					GeneratorRoutine gr = Generators_Get(genname);
 					if(!gr) {
 						COMMAND_PRINT("Unknown generator name");
 					}
+
+					if(COMMAND_GETARG(genseed, 12, argoffset))
+						numseed = String_ToInt(genseed);
+
 					World_Lock(world, 0);
 					World_CleanBlockArray(world);
-					if(gr(world, NULL) == false) {
+					if(gr(world, numseed) == false) {
 						World_Unlock(world);
 						COMMAND_PRINT("Generator failed");
 					}
