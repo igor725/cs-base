@@ -17,8 +17,8 @@ cs_bool Base_RemoveBan(cs_str name);
 
 COMMAND_FUNC(Info) {
 	COMMAND_PRINTF(
-		"CServer/%s with PluginAPI v%03d runned on %s",
-		Server_Version, PLUGIN_API_NUM, Base_OSName
+		"CServer/%s runned on &3%s",
+		Server_Version, Base_OSName
 	);
 }
 
