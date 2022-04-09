@@ -17,7 +17,7 @@ static void onspawnfunc(void *param) {
 		cs_str name = Client_GetName(client);
 		cs_str appname = Client_GetAppName(client);
 		if(String_FormatBuf(message, 128, "&e%s has joined (%s)", name, appname)) {
-			Client_Chat(Broadcast, MESSAGE_TYPE_CHAT, message);
+			Client_Chat(CLIENT_BROADCAST, MESSAGE_TYPE_CHAT, message);
 			Log_Info(message);
 		}
 	}
@@ -31,7 +31,7 @@ static void ondisconnectfunc(void *param) {
 	if(!Config_GetBoolByKey(Base_ConfigStore, "connect-notifications")) return;
 	cs_char message[128];
 	if(String_FormatBuf(message, 128, "&e%s left (%s)", Client_GetName(client), Client_GetDisconnectReason(client))) {
-		Client_Chat(Broadcast, MESSAGE_TYPE_CHAT, message);
+		Client_Chat(CLIENT_BROADCAST, MESSAGE_TYPE_CHAT, message);
 		Log_Info(message);
 	}
 }
