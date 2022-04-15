@@ -1,8 +1,6 @@
 #include <core.h>
-#include <log.h>
 #include <list.h>
 #include <client.h>
-#include <config.h>
 #include <command.h>
 #include <server.h>
 #include <plugin.h>

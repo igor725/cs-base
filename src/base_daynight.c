@@ -3,7 +3,6 @@
 #include <world.h>
 #include <timer.h>
 #include <assoc.h>
-#include <client.h>
 #include <list.h>
 
 extern CStore *Base_ConfigStore;

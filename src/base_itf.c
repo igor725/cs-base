@@ -1,4 +1,3 @@
-#include <core.h>
 #include "base_config.h"
 #include "base_lists.h"
 #include "base_itf.h"
