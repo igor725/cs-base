@@ -3,6 +3,7 @@
 #include <event.h>
 #include <str.h>
 #include <client.h>
+#include <command.h>
 #include <plugin.h>
 #include "base_lists.h"
 #include "base_itf.h"
@@ -89,12 +90,12 @@ cs_bool Plugin_Load(void) {
 	Base_Chat();
 	Base_Rcon();
 	Base_DayNight();
-	Base_Commands();
 	Base_Heartbeat();
 	Base_AutoSave();
 	Base_TNT();
 
-	return Event_RegisterBunch(events);
+	return Base_RegisterCommands() &&
+	Event_RegisterBunch(events);
 }
 
 cs_bool Plugin_Unload(cs_bool force) {
@@ -102,6 +103,7 @@ cs_bool Plugin_Unload(cs_bool force) {
 		Base_EmptyList(&Base_Operators);
 		Base_EmptyList(&Base_Bans);
 		Event_UnregisterBunch(events);
+		Base_UnregisterCommands();
 		if(Base_ConfigStore)
 			Config_DestroyStore(Base_ConfigStore);
 		return true;
