@@ -55,6 +55,7 @@ cs_bool Base_AddList(BList *list, cs_str name) {
 
 static cs_bool ListRemover(AListField *ptr, AListField **head, void *ud) {
 	if(String_CaselessCompare((AList_GetValue(ptr).str), (cs_str)ud)) {
+		Memory_Free(AList_GetValue(ptr).ptr);
 		AList_Remove(head, ptr);
 		return false;
 	}
@@ -69,4 +70,12 @@ cs_bool Base_RemoveList(BList *list, cs_str name) {
 	}
 
 	return false;
+}
+
+void Base_EmptyList(BList *list) {
+	list->alerted = true;
+	while(list->head) {
+		Memory_Free(AList_GetValue(list->head).ptr);
+		AList_Remove(&list->head, list->head);
+	}
 }

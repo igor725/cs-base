@@ -99,6 +99,8 @@ cs_bool Plugin_Load(void) {
 
 cs_bool Plugin_Unload(cs_bool force) {
 	if(force) {
+		Base_EmptyList(&Base_Operators);
+		Base_EmptyList(&Base_Bans);
 		Event_UnregisterBunch(events);
 		if(Base_ConfigStore)
 			Config_DestroyStore(Base_ConfigStore);
