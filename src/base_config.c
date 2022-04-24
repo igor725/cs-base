@@ -31,8 +31,12 @@ void Base_Config(void) {
 	Config_SetComment(ent, "Worlds autosave delay (Accepts values like 15m, 16h, 1d, anything else means autosaving is disabled)");
 	Config_SetDefaultStr(ent, "15m");
 
-	ent = Config_NewEntry(Base_ConfigStore, "tnt-deny", CONFIG_TYPE_BOOL);
-	Config_SetComment(ent, "If enabled, only operators can blow TNT");
+	ent = Config_NewEntry(Base_ConfigStore, "tnt-deny-place", CONFIG_TYPE_BOOL);
+	Config_SetComment(ent, "If enabled, TNT cannot be placed");
+	Config_SetDefaultBool(ent, false);
+
+	ent = Config_NewEntry(Base_ConfigStore, "tnt-deny-blow", CONFIG_TYPE_BOOL);
+	Config_SetComment(ent, "If enabled, TNT does not explode");
 	Config_SetDefaultBool(ent, true);
 
 	ent = Config_NewEntry(Base_ConfigStore, "rcon-enabled", CONFIG_TYPE_BOOL);

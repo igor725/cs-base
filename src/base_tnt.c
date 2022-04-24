@@ -6,22 +6,25 @@
 #include <world.h>
 
 extern CStore *Base_ConfigStore;
-CEntry *tntent = NULL;
+CEntry *tntpl = NULL, *tntbl = NULL;
 
 void Base_OnBlockPlace(void *param) {
 	onBlockPlace *a = (onBlockPlace *)param;
 
 	if(a->id == BLOCK_TNT) {
-		a->id = BLOCK_AIR;
-		if(Config_GetBool(tntent) && !Client_IsOP(a->client))
+		if(Config_GetBool(tntpl)) {
+			a->id = BLOCK_AIR;
 			return;
-		
+		} else if(Config_GetBool(tntbl))
+			return;
+
 		World *world = Client_GetWorld(a->client);
 		BulkBlockUpdate upd = {
 			.world = world,
 			.autosend = true
 		};
 
+		a->id = BLOCK_AIR;
 		World_Lock(world, 0);
 
 		SVec pos;
@@ -44,5 +47,6 @@ void Base_OnBlockPlace(void *param) {
 }
 
 void Base_TNT(void) {
-	tntent = Config_GetEntry(Base_ConfigStore, "tnt-deny");
+	tntpl = Config_GetEntry(Base_ConfigStore, "tnt-deny-place");
+	tntbl = Config_GetEntry(Base_ConfigStore, "tnt-deny-blow");
 }
