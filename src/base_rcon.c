@@ -40,7 +40,7 @@ INL static void setrconpayload(RPacket *packet, cs_str string) {
 INL static void rconcommandhandler(RClient *client, cs_char *str) {
 	if(*str == '/') ++str;
 
-	cs_char ret[MAX_CMD_OUT];
+	cs_char ret[MAX_CMD_OUT] = {0};
 	cs_char *args = str;
 
 	while(1) {
@@ -62,12 +62,12 @@ INL static void rconcommandhandler(RClient *client, cs_char *str) {
 			return;
 		}
 
-		CommandCallData ccdata;
-		ccdata.args = (cs_str)args;
-		ccdata.caller = NULL;
-		ccdata.command = cmd;
-		ccdata.out = ret;
-		*ret = '\0';
+		CommandCallData ccdata = {
+			.command = cmd,
+			.args = (cs_str)args,
+			.caller = NULL,
+			.out = ret
+		};
 
 		if(cmd->func(&ccdata))
 			setrconpayload(&client->packet, ret);
