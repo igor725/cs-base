@@ -92,65 +92,6 @@ COMMAND_FUNC(Uptime) {
 	);
 }
 
-#define PLUGIN_NAME \
-if(!COMMAND_GETARG(name, 64, 1)) { \
-	COMMAND_PRINTUSAGE; \
-} \
-cs_str lc = String_LastChar(name, '.'); \
-if(!lc || !String_CaselessCompare(lc, "." DLIB_EXT)) { \
-	String_Append(name, 64, "." DLIB_EXT); \
-}
-
-COMMAND_FUNC(Plugin) {
-	COMMAND_SETUSAGE("/plugin <load/unload/list> [pluginName]");
-	cs_char subcommand[8], name[64];
-	Plugin *plugin;
-
-	if(COMMAND_GETARG(subcommand, 8, 0)) {
-		if(String_CaselessCompare(subcommand, "load")) {
-			PLUGIN_NAME
-			if(!Plugin_Get(name)) {
-				if(Plugin_LoadDll(name)) {
-					COMMAND_PRINTF("Plugin \"%s\" loaded.", name);
-				} else {
-					COMMAND_PRINT("Something went wrong.");
-				}
-			}
-			COMMAND_PRINTF("Plugin \"%s\" is already loaded.", name);
-		} else if(String_CaselessCompare(subcommand, "unload")) {
-			PLUGIN_NAME
-			plugin = Plugin_Get(name);
-			if(!plugin) {
-				COMMAND_PRINTF("Plugin \"%s\" is not loaded.", name);
-			}
-			if(Plugin_UnloadDll(plugin, false)) {
-				COMMAND_PRINTF("Plugin \"%s\" successfully unloaded.", name);
-			} else {
-				COMMAND_PRINTF("Plugin \"%s\" cannot be unloaded.", name);
-			}
-		} else if(String_CaselessCompare(subcommand, "list")) {
-			cs_int32 idx = 1;
-			cs_char pluginfo[64];
-			COMMAND_APPEND("Loaded plugins list:");
-
-			for(cs_int32 i = 0; i < MAX_PLUGINS; i++) {
-				plugin = Plugins_List[i];
-				if(plugin) {
-					COMMAND_APPENDF(
-						pluginfo, 64,
-						"\r\n  %d.%s v%d", idx++,
-						plugin->name, plugin->version
-					);
-				}
-			}
-
-			return true;
-		}
-	}
-
-	COMMAND_PRINTUSAGE;
-}
-
 COMMAND_FUNC(Kick) {
 	COMMAND_SETUSAGE("/kick <player> [reason]");
 
@@ -374,7 +315,6 @@ Command_DeclareBunch(Commands) {
 	COMMAND_BUNCH_ADD(Ban, CMDF_OP, "Adds player to banlist")
 	COMMAND_BUNCH_ADD(UnBan, CMDF_OP, "Removes player from banlist")
 	COMMAND_BUNCH_ADD(Uptime, CMDF_NONE, "Prints server uptime")
-	COMMAND_BUNCH_ADD(Plugin, CMDF_OP, "Server plugin manager")
 	COMMAND_BUNCH_ADD(Kick, CMDF_OP, "Kicks a player off a server")
 	COMMAND_BUNCH_ADD(SetModel, CMDF_OP | CMDF_CLIENT, "Sets player model")
 	COMMAND_BUNCH_ADD(SetWeather, CMDF_OP | CMDF_CLIENT, "Sets weather in current world")
