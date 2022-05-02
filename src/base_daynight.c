@@ -7,8 +7,9 @@
 
 extern CStore *Base_ConfigStore;
 AssocType DayNightType;
-const cs_int32 DayLength = 360,
+static const cs_int32 DayLength = 360,
 NightLength = 480;
+static Timer *DNTimer = NULL;
 
 static struct _ColorPreset {
 	Color3 diffuse, ambient,
@@ -87,5 +88,10 @@ void Base_OnWorldUnloaded(void *param) {
 void Base_DayNight(void) {
 	CEntry *ent = Config_GetEntry(Base_ConfigStore, "time-cycle");
 	DayNightType = Assoc_NewType(ASSOC_BIND_WORLD);
-	if(DayNightType >= 0) Timer_Add(-1, 1000, DNCycle, ent);
+	if(DayNightType >= 0) DNTimer = Timer_Add(-1, 1000, DNCycle, ent);
+}
+
+void Base_DayNightUninit(void) {
+	if(DNTimer)
+		Timer_Remove(DNTimer);
 }

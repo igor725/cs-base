@@ -7,6 +7,7 @@ void Base_Rcon(void);
 void Base_Chat(void);
 void Base_Config(void);
 void Base_DayNight(void);
+void Base_DayNightUninit(void);
 void Base_OnStop(void *);
 void Base_OnBlockPlace(void *);
 cs_bool Base_OnHandshake(void *);

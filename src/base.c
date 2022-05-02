@@ -104,6 +104,7 @@ cs_bool Plugin_Unload(cs_bool force) {
 		Base_EmptyList(&Base_Bans);
 		Event_UnregisterBunch(events);
 		Base_UnregisterCommands();
+		Base_DayNightUninit();
 		if(Base_ConfigStore)
 			Config_DestroyStore(Base_ConfigStore);
 		return true;
