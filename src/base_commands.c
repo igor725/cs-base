@@ -14,10 +14,19 @@ cs_bool Base_AddBan(cs_str name);
 cs_bool Base_RemoveBan(cs_str name);
 
 COMMAND_FUNC(Info) {
-	COMMAND_PRINTF(
-		"Base plugin v%03d (%s) for CServer/%s on &3%s",
-		Plugin_Version, GIT_COMMIT_TAG, Server_Version, Base_OSName
-	);
+	ServerInfo si;
+	if(Server_GetInfo(&si, sizeof(si)))
+		COMMAND_PRINTF(
+			"Installation info:\r\n"
+			"  &3OS&f: %s\r\n"
+			"  &aSoftware&f: %s (%s)\r\n"
+			"  &bBase plugin version&f: %03d (%s)",
+			Base_OSName,
+			si.coreFullName, (si.coreFlags & SERVERINFO_FLAG_DEBUG) ? "DBG" : "REL",
+			Plugin_Version, GIT_COMMIT_TAG
+		);
+	else
+		COMMAND_PRINT("Failed to get the server info");
 }
 
 COMMAND_FUNC(MakeOp) {

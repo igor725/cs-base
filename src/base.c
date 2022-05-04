@@ -76,7 +76,8 @@ Event_DeclareBunch (events) {
 
 cs_bool Plugin_Load(void) {
 #	if defined(CORE_USE_WINDOWS)
-		String_Copy(Base_OSName, 64, "Windows");
+		String_Copy(Base_OSName, 64, "Windows ");
+		String_Append(Base_OSName, 64, sizeof(cs_size) == 8 ? "64" : "32");
 #	elif defined(CORE_USE_UNIX)
 		cs_file uname = File_ProcOpen("uname -osm", "r");
 		if(uname) {
