@@ -92,6 +92,8 @@ void Base_DayNight(void) {
 }
 
 void Base_DayNightUninit(void) {
-	if(DNTimer)
+	if(DNTimer) {
 		Timer_Remove(DNTimer);
+		DNTimer = NULL;
+	}
 }
