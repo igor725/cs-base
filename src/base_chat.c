@@ -8,7 +8,7 @@
 
 extern CStore *Base_ConfigStore;
 
-static void onspawnfunc(void *param) {
+void Base_OnSpawn(void *param) {
 	if(!Config_GetBoolByKey(Base_ConfigStore, "connect-notifications")) return;
 	Client *client = ((onSpawn *)param)->client;
 	char message[128];
@@ -23,7 +23,7 @@ static void onspawnfunc(void *param) {
 	}
 }
 
-static void ondisconnectfunc(void *param) {
+void Base_OnDisconnect(void *param) {
 	if(!Server_Active) return;
 	Client *client = (Client *)param;
 	if(Client_IsBot(client)) return;
@@ -34,9 +34,4 @@ static void ondisconnectfunc(void *param) {
 		Client_Chat(CLIENT_BROADCAST, MESSAGE_TYPE_CHAT, message);
 		Log_Info(message);
 	}
-}
-
-void Base_Chat(void) {
-	Event_RegisterVoid(EVT_ONSPAWN, onspawnfunc);
-	Event_RegisterVoid(EVT_ONDISCONNECT, ondisconnectfunc);
 }

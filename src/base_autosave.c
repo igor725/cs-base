@@ -7,6 +7,7 @@
 #include <list.h>
 
 extern CStore *Base_ConfigStore;
+Timer *ASTimer = NULL;
 
 TIMER_FUNC(AutoSave) {
 	(void)left; (void)ticks; (void)ud;
@@ -55,7 +56,14 @@ void Base_AutoSave(void) {
 	cs_uint32 delay = ParseDelayValue(dvalue);
 
 	if(delay > 0)
-		Timer_Add(-1, delay, AutoSave, NULL);
+		ASTimer = Timer_Add(-1, delay, AutoSave, NULL);
 	else
 		Log_Warn("Autosaving feature is disabled!");
+}
+
+void Base_AutoSaveUninit(void) {
+	if(ASTimer) {
+		Timer_Remove(ASTimer);
+		ASTimer = NULL;
+	}
 }

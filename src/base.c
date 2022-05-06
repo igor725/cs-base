@@ -65,11 +65,13 @@ static cs_bool Base_Whisper(onMessage *a) {
 }
 
 Event_DeclareBunch (events) {
-	EVENT_BUNCH_ADD('b', EVT_ONMESSAGE, Base_Whisper)
-	EVENT_BUNCH_ADD('b', EVT_ONHANDSHAKEDONE, Base_OnHandshake)
-	EVENT_BUNCH_ADD('v', EVT_ONWORLDUNLOADED, Base_OnWorldUnloaded)
-	EVENT_BUNCH_ADD('v', EVT_ONBLOCKPLACE, Base_OnBlockPlace)
 	EVENT_BUNCH_ADD('v', EVT_ONSTOP, Base_OnStop)
+	EVENT_BUNCH_ADD('b', EVT_ONHANDSHAKEDONE, Base_OnHandshake)
+	EVENT_BUNCH_ADD('v', EVT_ONDISCONNECT, Base_OnDisconnect)
+	EVENT_BUNCH_ADD('v', EVT_ONSPAWN, Base_OnSpawn)
+	EVENT_BUNCH_ADD('b', EVT_ONMESSAGE, Base_Whisper)
+	EVENT_BUNCH_ADD('v', EVT_ONBLOCKPLACE, Base_OnBlockPlace)
+	EVENT_BUNCH_ADD('v', EVT_ONWORLDUNLOADED, Base_OnWorldUnloaded)
 
 	EVENT_BUNCH_END
 };
@@ -88,7 +90,6 @@ cs_bool Plugin_Load(void) {
 #	endif
 
 	Base_Config();
-	Base_Chat();
 	Base_Rcon();
 	Base_DayNight();
 	Base_Heartbeat();
@@ -100,16 +101,16 @@ cs_bool Plugin_Load(void) {
 }
 
 cs_bool Plugin_Unload(cs_bool force) {
-	if(force) {
-		Base_EmptyList(&Base_Operators);
-		Base_EmptyList(&Base_Bans);
-		Event_UnregisterBunch(events);
-		Base_UnregisterCommands();
-		Base_DayNightUninit();
-		if(Base_ConfigStore)
-			Config_DestroyStore(Base_ConfigStore);
-		return true;
-	}
+	(void)force;
+	Base_EmptyList(&Base_Operators);
+	Base_EmptyList(&Base_Bans);
+	Event_UnregisterBunch(events);
+	Base_UnregisterCommands();
+	Base_DayNightUninit();
+	Base_AutoSaveUninit();
+	Base_HeartbeatStop();
+	if(Base_ConfigStore)
+		Config_DestroyStore(Base_ConfigStore);
 
-	return false;
+	return true;
 }
