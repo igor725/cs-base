@@ -4,6 +4,7 @@
 #include <command.h>
 #include <server.h>
 #include <plugin.h>
+#include <pager.h>
 #include <generators.h>
 #include <world.h>
 
@@ -157,7 +158,7 @@ COMMAND_FUNC(SetWeather) {
 }
 
 COMMAND_FUNC(World) {
-	COMMAND_SETUSAGE("/world <create/save/load/unload/generate/info> ...");
+	COMMAND_SETUSAGE("/world <create/save/load/unload/generate/list> ...");
 
 	cs_char subcmd[64], worldname[64];
 	if(COMMAND_GETARG(subcmd, 64, 0)) {
@@ -214,9 +215,10 @@ COMMAND_FUNC(World) {
 				argoffset = 1;
 				if(ccdata->caller) {
 					world = Client_GetWorld(ccdata->caller);
-					if(!world) COMMAND_PRINTUSAGE;
 				}
 			}
+
+			if(!world) COMMAND_PRINTUSAGE;
 
 			if(String_CaselessCompare(subcmd, "save")) {
 				if(World_Save(world))
@@ -265,19 +267,33 @@ COMMAND_FUNC(World) {
 					}
 					COMMAND_PRINT("World generation done");
 				}
-			} else if(String_CaselessCompare(subcmd, "info")) {
-				COMMAND_PRINTLINE("&aList of loaded worlds:");
+			} else if(String_CaselessCompare(subcmd, "list")) {
+				COMMAND_APPEND("&aList of loaded worlds:");
+
 				AListField *tmp;
 				SVec dims;
+				cs_int32 startPage = 1;
+				if(COMMAND_GETARG(subcmd, 64, 1))
+					startPage = String_ToInt(subcmd);
+				Pager pager = Pager_Init(startPage, PAGER_DEFAULT_PAGELEN);
+
 				List_Iter(tmp, World_Head) {
+					Pager_Step(pager);
+
 					world = AList_GetValue(tmp).ptr;
 					cs_str wname = World_GetName(world);
 					World_GetDimensions(world, &dims);
-					COMMAND_PRINTFLINE("  &3%s&f: &d%dx%dx%d&f with &9%d&f players",
+					COMMAND_APPENDF(worldname, 64, "\r\n  &3%s&f: &d%dx%dx%d&f with &9%d&f players",
 						wname, dims.x, dims.y, dims.z, World_CountPlayers(world)
 					);
 				}
-				return false;
+
+				if(Pager_IsDirty(pager))
+					COMMAND_APPENDF(worldname, 64, "\r\nPage %d/%d shown",
+						Pager_CurrentPage(pager), Pager_CountPages(pager)
+					);
+
+				return true;
 			}
 		}
 	}
