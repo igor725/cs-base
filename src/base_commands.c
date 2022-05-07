@@ -18,9 +18,9 @@ COMMAND_FUNC(Info) {
 	ServerInfo si;
 	if(Server_GetInfo(&si, sizeof(si))) {
 		COMMAND_PRINTF(
-			"Installation info:\r\n"
-			"  &3OS&f: %s\r\n"
-			"  &aSoftware&f: %s (%s)\r\n"
+			"&aInstallation info:\r\n"
+			"  &1OS&f: %s\r\n"
+			"  &9Software&f: %s (%s)\r\n"
 			"  &bBase plugin version&f: %03d (%s)",
 			Base_OSName,
 			si.coreFullName, (si.coreFlags & SERVERINFO_FLAG_DEBUG) ? "DBG" : "REL",

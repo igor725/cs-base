@@ -94,7 +94,6 @@ cs_bool Plugin_Load(void) {
 	Base_DayNight();
 	Base_Heartbeat();
 	Base_AutoSave();
-	Base_TNT();
 
 	return Base_RegisterCommands() &&
 	Event_RegisterBunch(events);

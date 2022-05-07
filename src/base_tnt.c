@@ -12,6 +12,11 @@ void Base_OnBlockPlace(void *param) {
 	onBlockPlace *a = (onBlockPlace *)param;
 
 	if(a->id == BLOCK_TNT) {
+		if(!tntpl || !tntbl) {
+			tntpl = Config_GetEntry(Base_ConfigStore, "tnt-deny-place");
+			tntbl = Config_GetEntry(Base_ConfigStore, "tnt-deny-blow");
+			if(!tntpl || !tntbl) return;
+		}
 		if(Config_GetBool(tntpl)) {
 			a->id = BLOCK_AIR;
 			return;
@@ -44,9 +49,4 @@ void Base_OnBlockPlace(void *param) {
 		Block_BulkUpdateSend(&upd);
 		World_Unlock(world);
 	}
-}
-
-void Base_TNT(void) {
-	tntpl = Config_GetEntry(Base_ConfigStore, "tnt-deny-place");
-	tntbl = Config_GetEntry(Base_ConfigStore, "tnt-deny-blow");
 }

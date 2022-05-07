@@ -2,7 +2,6 @@
 #define CSBASEFUNCS_H
 #include "core.h"
 
-void Base_TNT(void);
 void Base_Rcon(void);
 void Base_Config(void);
 void Base_DayNight(void);
