@@ -1,18 +1,21 @@
 #ifndef CSBASEITF_H
 #define CSBASEITF_H
 #include <core.h>
+#include <types/config.h>
 
 #define BASE_ITF_NAME "BaseController_v1"
 
 typedef struct _BaseItf {
-	cs_bool (*isIsBanList)(cs_str name);
-	cs_bool (*isInOPList)(cs_str name);
+	cs_bool (*isBanned)(cs_str name);
+	cs_bool (*isOperator)(cs_str name);
 
-	cs_bool (*addToBanList)(cs_str name);
-	cs_bool (*addToOPList)(cs_str name);
+	cs_bool (*banUser)(cs_str name);
+	cs_bool (*opUser)(cs_str name);
 
-	cs_bool (*removeFromBanList)(cs_str name);
-	cs_bool (*removeFromOPList)(cs_str name);
+	cs_bool (*unbanUser)(cs_str name);
+	cs_bool (*deopUser)(cs_str name);
+
+	CStore *(*getConfig)(void);
 } BaseItf;
 
 extern BaseItf BaseController;

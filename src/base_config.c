@@ -124,6 +124,10 @@ cs_bool Base_OnHandshake(onHandshakeDone *a) {
 	return true;
 }
 
+CStore *Base_GetConfig(void) {
+	return Base_ConfigStore;
+}
+
 void Base_OnStop(void) {
 	if(!Base_SaveList(&Base_Operators))
 		Log_Error("Failed to save ops.txt.");

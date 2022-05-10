@@ -3,14 +3,17 @@
 #include "base_itf.h"
 
 extern BList Base_Operators, Base_Bans;
+extern CStore *Base_ConfigStore;
 
 BaseItf BaseController = {
-	.isIsBanList = Base_IsBanned,
-	.isInOPList = Base_IsOP,
+	.isBanned = Base_IsBanned,
+	.isOperator = Base_IsOP,
 
-	.addToBanList = Base_AddBan,
-	.addToOPList = Base_AddOP,
+	.banUser = Base_AddBan,
+	.opUser = Base_AddOP,
 
-	.removeFromBanList = Base_RemoveBan,
-	.removeFromOPList = Base_RemoveOP
+	.unbanUser = Base_RemoveBan,
+	.deopUser = Base_RemoveOP,
+
+	.getConfig = Base_GetConfig
 };
