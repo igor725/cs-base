@@ -20,10 +20,11 @@ COMMAND_FUNC(Info) {
 		COMMAND_PRINTF(
 			"&aInstallation info:\r\n"
 			"  &1OS&f: %s\r\n"
-			"  &9Software&f: %s (%s)\r\n"
+			"  &9Software&f: %s/%s (%s)\r\n"
 			"  &bBase plugin version&f: %03d (%s)",
 			Base_OSName,
-			si.coreFullName, (si.coreFlags & SERVERINFO_FLAG_DEBUG) ? "DBG" : "REL",
+			si.coreName, si.coreGitTag,
+			(si.coreFlags & SERVERINFO_FLAG_DEBUG) ? "DBG" : "REL",
 			Plugin_Version, GIT_COMMIT_TAG
 		);
 	}
