@@ -235,7 +235,7 @@ COMMAND_FUNC(World) {
 					world = AList_GetValue(tmp).ptr;
 					cs_str wname = World_GetName(world);
 					World_GetDimensions(world, &dims);
-					COMMAND_APPENDF(worldname, 64, "\r\n  &3%.18s&f: &d%dx%dx%d&f with &9%d&f player(-s)",
+					COMMAND_APPENDF(worldname, 64, "\r\n  &3%.12s&f: &d%dx%dx%d&f with &9%d&f player(-s)",
 						wname, dims.x, dims.y, dims.z, World_CountPlayers(world)
 					);
 				}
