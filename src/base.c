@@ -50,11 +50,18 @@ cs_bool Plugin_Load(void) {
 		String_Copy(Base_OSName, 64, "Windows ");
 		String_Append(Base_OSName, 64, sizeof(cs_size) == 8 ? "64" : "32");
 #	elif defined(CORE_USE_UNIX)
-		cs_file uname = File_ProcOpen("uname -osm", "r");
+#		ifdef CORE_USE_DARWIN
+#			define UARGS "sm"
+#		else
+#			define UARGS "osm"
+#		endif
+		cs_file uname = File_ProcOpen("uname -" UARGS, "r");
 		if(uname) {
 			File_ReadLine(uname, Base_OSName, 64);
 			File_ProcClose(uname);
-		} else
+		}
+
+		if(*Base_OSName == '\0')
 			String_Copy(Base_OSName, 64, "Unix-like");
 #	endif
 
