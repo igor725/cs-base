@@ -12,6 +12,7 @@ FILETYPE VFT_DLL
 			VALUE "FileDescription", "Base CServer functionality\000"
 			VALUE "ProductName", "Base plugin\000"
 			VALUE "ProductVersion", "1.0\000"
+			VALUE "LegalCopyright", "Copyright (c) 2022 igor725"
 			VALUE "OriginalFilename", "base.dll\000"
 		}
 	}

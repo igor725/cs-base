@@ -9,7 +9,7 @@
 #include <types/event.h>
 #include "base_lists.h"
 
-#define BASECFG "base.cfg"
+#define BASECFG "base"
 
 extern CStore *Base_ConfigStore;
 extern BList Base_Operators, Base_Bans;

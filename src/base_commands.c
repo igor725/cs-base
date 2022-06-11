@@ -73,7 +73,7 @@ COMMAND_FUNC(Ban) {
 			if(client) Client_Kick(client, "You are banned!");
 			COMMAND_PRINTF("Player %s banned.", clientname);
 		}
-		
+
 		COMMAND_PRINT("Cannot add this player to the banlist.");
 	}
 	COMMAND_PRINTUSAGE;
@@ -116,7 +116,7 @@ COMMAND_FUNC(Kick) {
 			Client_Kick(tg, String_FromArgument(ccdata->args, 1));
 			COMMAND_PRINTF("Player %s kicked.", playername);
 		}
-		
+
 		COMMAND_PRINT("Player not found.");
 	}
 
@@ -193,10 +193,10 @@ COMMAND_FUNC(World) {
 					World_Add(tmp);
 					COMMAND_PRINTF("World \"%s\" created.", worldname);
 				}
-				
+
 				COMMAND_PRINT("Unexpected error");
 			}
-			
+
 			COMMAND_PRINT("Invalid dimensions, use /world create <name> <x> <y> <z>");
 		} else if(String_CaselessCompare(subcmd, "load")) {
 			if(world) COMMAND_PRINT("This world is already loaded");
@@ -253,7 +253,7 @@ COMMAND_FUNC(World) {
 			if(String_CaselessCompare(subcmd, "save")) {
 				if(World_Save(world))
 					COMMAND_PRINT("World saving scheduled");
-				
+
 				COMMAND_PRINT("This world is busy, try again later");
 			} else if(String_CaselessCompare(subcmd, "unload")) {
 				if(world == mainw)
@@ -267,10 +267,10 @@ COMMAND_FUNC(World) {
 				if(World_Save(world)) {
 					if(World_Remove(world))
 						COMMAND_PRINT("World unloaded.");
-					
+
 					COMMAND_PRINT("Unexpected error");
 				} 
-				
+
 				COMMAND_PRINT("This world is busy, try again later");
 			} else if(String_CaselessCompare(subcmd, "generate")) {
 				cs_char genname[64], genseed[12];
@@ -317,7 +317,7 @@ COMMAND_FUNC(GoTo) {
 			if(Client_ChangeWorld(ccdata->caller, world))
 				COMMAND_PRINTF("Teleported to \"%s\"", worldname);
 		}
-		
+
 		COMMAND_PRINT("World not found.");
 	}
 
