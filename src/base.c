@@ -40,7 +40,7 @@ Event_DeclareBunch (events) {
 	EVENT_BUNCH_ADD('v', EVT_ONSPAWN, Base_OnSpawn),
 	EVENT_BUNCH_ADD('b', EVT_ONMESSAGE, Base_OnMessage),
 	EVENT_BUNCH_ADD('v', EVT_ONBLOCKPLACE, Base_OnBlockPlace),
-	EVENT_BUNCH_ADD('v', EVT_ONWORLDUNLOADED, Base_OnWorldUnloaded),
+	EVENT_BUNCH_ADD('v', EVT_ONWORLDSTATUSCHANGE, Base_OnWorldStatus),
 
 	EVENT_BUNCH_END
 };

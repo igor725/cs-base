@@ -81,8 +81,9 @@ TIMER_FUNC(DNCycle) {
 	}
 }
 
-void Base_OnWorldUnloaded(void *param) {
-	Assoc_Remove(param, DayNightType);
+void Base_OnWorldStatus(void *param) {
+	if (!World_IsReadyToPlay(param))
+		Assoc_Remove(param, DayNightType);
 }
 
 void Base_DayNight(void) {
