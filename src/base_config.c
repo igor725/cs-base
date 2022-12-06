@@ -21,8 +21,8 @@ void Base_Config(void) {
 		Log_Error("Failed to load bans.txt.");
 
 	Base_ConfigStore = Config_NewStore(BASECFG);
-	CEntry *ent;
 
+	CEntry *ent;
 	ent = Config_NewEntry(Base_ConfigStore, "time-cycle", CONFIG_TYPE_BOOL);
 	Config_SetComment(ent, "Enable day/night cycle");
 	Config_SetDefaultBool(ent, false);
@@ -87,7 +87,7 @@ void Base_Config(void) {
 		Config_ResetToDefault(Base_ConfigStore);
 	}
 
-	Config_Save(Base_ConfigStore, true);
+	Config_Save(Base_ConfigStore, false);
 }
 
 cs_bool Base_IsOP(cs_str name) {

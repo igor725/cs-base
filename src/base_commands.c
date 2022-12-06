@@ -325,17 +325,17 @@ COMMAND_FUNC(GoTo) {
 }
 
 Command_DeclareBunch(Commands) {
-	COMMAND_BUNCH_ADD(Info, CMDF_NONE, "Prints server software info")
-	COMMAND_BUNCH_ADD(MakeOp, CMDF_OP, "Grant operator status to a player")
-	COMMAND_BUNCH_ADD(DeOp, CMDF_OP, "Revokes operator status from a player")
-	COMMAND_BUNCH_ADD(Ban, CMDF_OP, "Adds player to banlist")
-	COMMAND_BUNCH_ADD(UnBan, CMDF_OP, "Removes player from banlist")
-	COMMAND_BUNCH_ADD(Uptime, CMDF_NONE, "Prints server uptime")
-	COMMAND_BUNCH_ADD(Kick, CMDF_OP, "Kicks a player off a server")
-	COMMAND_BUNCH_ADD(SetModel, CMDF_OP | CMDF_CLIENT, "Sets player model")
-	COMMAND_BUNCH_ADD(SetWeather, CMDF_OP | CMDF_CLIENT, "Sets weather in current world")
-	COMMAND_BUNCH_ADD(GoTo, CMDF_OP | CMDF_CLIENT, "Teleports you to specified world")
-	COMMAND_BUNCH_ADD(World, CMDF_OP, "Worlds management")
+	COMMAND_BUNCH_ADD(Info, CMDF_NONE, "Prints server software info"),
+	COMMAND_BUNCH_ADD(MakeOp, CMDF_OP, "Grant operator status to a player"),
+	COMMAND_BUNCH_ADD(DeOp, CMDF_OP, "Revokes operator status from a player"),
+	COMMAND_BUNCH_ADD(Ban, CMDF_OP, "Adds player to banlist"),
+	COMMAND_BUNCH_ADD(UnBan, CMDF_OP, "Removes player from banlist"),
+	COMMAND_BUNCH_ADD(Uptime, CMDF_NONE, "Prints server uptime"),
+	COMMAND_BUNCH_ADD(Kick, CMDF_OP, "Kicks a player off a server"),
+	COMMAND_BUNCH_ADD(SetModel, CMDF_OP | CMDF_CLIENT, "Sets player model"),
+	COMMAND_BUNCH_ADD(SetWeather, CMDF_OP | CMDF_CLIENT, "Sets weather in current world"),
+	COMMAND_BUNCH_ADD(GoTo, CMDF_OP | CMDF_CLIENT, "Teleports you to specified world"),
+	COMMAND_BUNCH_ADD(World, CMDF_OP, "Worlds management"),
 
 	COMMAND_BUNCH_END
 };
