@@ -152,7 +152,7 @@ void Base_Rcon(void) {
 			return;
 		} else Rcon_Password = String_AllocCopy(Rcon_Password);
 		cs_str ip = Config_GetStrByKey(Server_Config, "server-ip");
-		cs_uint16 port = Config_GetInt16ByKey(Base_ConfigStore, "rcon-port");
+		cs_uint16 port = (cs_uint16)Config_GetIntByKey(Base_ConfigStore, "rcon-port");
 		if((Rcon_Socket = Socket_New()) == INVALID_SOCKET) {
 			Error_PrintSys(false);
 			return;

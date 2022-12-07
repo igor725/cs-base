@@ -138,7 +138,7 @@ COMMAND_FUNC(SetModel) {
 }
 
 COMMAND_FUNC(SetWeather) {
-	COMMAND_SETUSAGE("/setweather <weathertype>");
+	COMMAND_SETUSAGE("/setweather <sunny/rain/snow>");
 
 	World *world = Client_GetWorld(ccdata->caller);
 	if(!world) COMMAND_PRINT("Something went wrong");

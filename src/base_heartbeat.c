@@ -14,7 +14,7 @@ void Base_Heartbeat(void) {
 			Heartbeat_SetRequestPath(CCHbeat, "/server/heartbeat/");
 			Heartbeat_SetPlayURL(CCHbeat, "http://www.classicube.net/server/play/");
 			Heartbeat_SetPublic(CCHbeat, Config_GetBoolByKey(Base_ConfigStore, "heartbeat-public"));
-			Heartbeat_SetDelay(CCHbeat, Config_GetInt8ByKey(Base_ConfigStore, "heartbeat-delay") * 1000);
+			Heartbeat_SetDelay(CCHbeat, (cs_uint16)Config_GetIntByKey(Base_ConfigStore, "heartbeat-delay") * 1000);
 			if(Heartbeat_Run(CCHbeat)) return;
 		}
 

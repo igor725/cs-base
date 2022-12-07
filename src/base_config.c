@@ -43,9 +43,10 @@ void Base_Config(void) {
 	Config_SetComment(ent, "Enable or disable rcon protocol");
 	Config_SetDefaultBool(ent, false);
 
-	ent = Config_NewEntry(Base_ConfigStore, "rcon-port", CONFIG_TYPE_INT16);
-	Config_SetComment(ent, "Use specified port to accept rcon clients [1-65535]");
-	Config_SetDefaultInt16(ent, 25575);
+	ent = Config_NewEntry(Base_ConfigStore, "rcon-port", CONFIG_TYPE_INT);
+	Config_SetComment(ent, "Use specified port to accept rcon clients [0-65535]");
+	Config_SetLimit(ent, 0, 65535);
+	Config_SetDefaultInt(ent, 25575);
 
 	ent = Config_NewEntry(Base_ConfigStore, "rcon-password", CONFIG_TYPE_STR);
 	Config_SetComment(ent, "Rcon authorization password");
@@ -59,10 +60,10 @@ void Base_Config(void) {
 	Config_SetComment(ent, "Enable ClassiCube heartbeat");
 	Config_SetDefaultBool(ent, false);
 
-	ent = Config_NewEntry(Base_ConfigStore, "heartbeat-delay", CONFIG_TYPE_INT8);
+	ent = Config_NewEntry(Base_ConfigStore, "heartbeat-delay", CONFIG_TYPE_INT);
 	Config_SetComment(ent, "Heartbeat request delay [1-60]");
 	Config_SetLimit(ent, 1, 60);
-	Config_SetDefaultInt8(ent, 10);
+	Config_SetDefaultInt(ent, 10);
 
 	ent = Config_NewEntry(Base_ConfigStore, "heartbeat-public", CONFIG_TYPE_BOOL);
 	Config_SetComment(ent, "Show server in the ClassiCube server list");
