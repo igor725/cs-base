@@ -26,6 +26,8 @@ cs_char Base_OSName[64];
 
 Plugin_SetVersion(1);
 
+extern BaseItf BaseController;
+
 Plugin_DeclareInterfaces {
 	PLUGIN_IFACE_ADD(BASE_ITF_NAME, BaseController)
 

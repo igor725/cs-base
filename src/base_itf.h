@@ -3,6 +3,7 @@
 #include <core.h>
 #include <types/config.h>
 
+#define BASE_ITF_VERSION 1
 #define BASE_ITF_NAME "BaseController_v1"
 
 typedef struct _BaseItf {
@@ -17,6 +18,4 @@ typedef struct _BaseItf {
 
 	CStore *(*getConfig)(void);
 } BaseItf;
-
-extern BaseItf BaseController;
 #endif
