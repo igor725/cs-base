@@ -96,19 +96,43 @@ cs_bool Base_IsOP(cs_str name) {
 }
 
 cs_bool Base_AddOP(cs_str name) {
-	return Base_AddList(&Base_Operators, name);
+	if(Base_AddList(&Base_Operators, name)) {
+		Client *client;
+		if((client = Client_GetByName(name)) != NULL)
+			Client_SetOP(client, true);
+		return true;
+	}
+
+	return false;
 }
 
 cs_bool Base_RemoveOP(cs_str name) {
-	return Base_RemoveList(&Base_Operators, name);
+	if(Base_RemoveList(&Base_Operators, name)) {
+		Client *client;
+		if((client = Client_GetByName(name)) != NULL)
+			Client_SetOP(client, false);
+		return true;
+	}
+
+	return false;
 }
 
 cs_bool Base_IsBanned(cs_str name) {
 	return Base_CheckList(&Base_Bans, name);
 }
 
+cs_str const banmess = "You are banned!";
+
 cs_bool Base_AddBan(cs_str name) {
-	return Base_AddList(&Base_Bans, name);
+	if(Base_AddList(&Base_Bans, name)) {
+		Client *client;
+		if((client = Client_GetByName(name)) != NULL)
+			Client_Kick(client, banmess);
+
+		return true;
+	}
+
+	return false;
 }
 
 cs_bool Base_RemoveBan(cs_str name) {
@@ -117,7 +141,7 @@ cs_bool Base_RemoveBan(cs_str name) {
 
 cs_bool Base_OnHandshake(onHandshakeDone *a) {
 	if(Base_IsBanned(Client_GetName(a->client))) {
-		Client_Kick(a->client, "You are banned!");
+		Client_Kick(a->client, banmess);
 		return false;
 	} else if(Base_IsOP(Client_GetName(a->client)))
 		Client_SetOP(a->client, true);
