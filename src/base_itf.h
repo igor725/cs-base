@@ -4,7 +4,7 @@
 #include <types/config.h>
 
 #define BASE_ITF_VERSION 1
-#define BASE_ITF_NAME "BaseController_v1"
+#define CSBASE_ITF_NAME "BaseController_v1"
 
 typedef struct _BaseItf {
 	cs_bool (*isBanned)(cs_str name);

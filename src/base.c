@@ -32,7 +32,7 @@ Plugin_SetURL("https://github.com/igor725/cs-base");
 extern BaseItf BaseController;
 
 Plugin_DeclareInterfaces {
-	PLUGIN_IFACE_ADD(BASE_ITF_NAME, BaseController),
+	PLUGIN_IFACE_ADD(CSBASE_ITF_NAME, BaseController),
 
 	PLUGIN_IFACE_END
 };
