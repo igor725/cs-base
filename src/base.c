@@ -25,11 +25,14 @@ CStore *Base_ConfigStore;
 cs_char Base_OSName[64];
 
 Plugin_SetVersion(1);
+#if PLUGIN_API_NUM > 1
+Plugin_SetURL("https://github.com/igor725/cs-base");
+#endif
 
 extern BaseItf BaseController;
 
 Plugin_DeclareInterfaces {
-	PLUGIN_IFACE_ADD(BASE_ITF_NAME, BaseController)
+	PLUGIN_IFACE_ADD(BASE_ITF_NAME, BaseController),
 
 	PLUGIN_IFACE_END
 };
