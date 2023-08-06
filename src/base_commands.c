@@ -269,7 +269,7 @@ COMMAND_FUNC(World) {
 						COMMAND_PRINT("World unloaded.");
 
 					COMMAND_PRINT("Unexpected error");
-				} 
+				}
 
 				COMMAND_PRINT("This world is busy, try again later");
 			} else if(String_CaselessCompare(subcmd, "generate")) {

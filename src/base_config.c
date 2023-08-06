@@ -77,7 +77,7 @@ void Base_Config(void) {
 			if(line != ENOENT)
 				Log_Error(Sstor_Get("SV_CFG_ERR2"), "open", BASECFG, Config_ErrorToString(code), extra);
 		} else {
-			cs_str scode = Config_ErrorToString(code), 
+			cs_str scode = Config_ErrorToString(code),
 			sextra = Config_ExtraToString(extra);
 			if(line > 0)
 				Log_Error(Sstor_Get("SV_CFGL_ERR"), line, BASECFG, scode, sextra);
